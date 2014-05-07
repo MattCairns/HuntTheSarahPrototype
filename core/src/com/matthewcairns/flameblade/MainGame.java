@@ -38,6 +38,9 @@ public class MainGame implements Screen {
         batch.begin();
         player.draw(batch);
         batch.end();
+
+
+        player.act(Gdx.graphics.getDeltaTime());
     }
 
     @Override
