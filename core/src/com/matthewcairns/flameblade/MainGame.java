@@ -32,7 +32,7 @@ public class MainGame implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 1, 1);
+        Gdx.gl.glClearColor(0.247f, 0.486f, 0.714f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();

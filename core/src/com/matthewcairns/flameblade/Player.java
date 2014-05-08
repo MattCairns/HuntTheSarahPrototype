@@ -1,6 +1,7 @@
 package com.matthewcairns.flameblade;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -19,9 +20,10 @@ public class Player {
     //Load texture and create a rectangle matching the players size.
     Texture texture = new Texture(Gdx.files.internal("player.png"));
     Sprite player = new Sprite(texture, 64, 64);
+
+    Vector2 direction;
+    float speed = 30.0f;
     Vector2 playerPos = new Vector2(400-player.getWidth()/2, 240-player.getHeight()/2);
-
-
     Vector2 mousePos;
 
     public Player() {
@@ -32,8 +34,23 @@ public class Player {
         //Store position of mouse as a vector.
         mousePos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
         Vector2 playerMouseAngle = mousePos.sub(playerPos);
+
+        System.out.println(playerMouseAngle.angle());
         //Rotates the player to the position of the mouse.
-        player.setRotation(-(playerMouseAngle.angle()-90));
+        player.setRotation(-playerMouseAngle.angle() - 90);
+
+        if(Gdx.input.isKeyPressed(Input.Keys.W)) {
+            float newAngle = (float) playerMouseAngle.angle();
+            direction = new Vector2((float) Math.cos(Math.toRadians(-playerMouseAngle.angle())), (float)Math.sin(Math.toRadians(-playerMouseAngle.angle())));
+
+            float velocityX  = 0;
+            float velocityY = 0;
+
+            velocityX += direction.x * 200.0f;
+            velocityY += direction.y * 200.0f;
+
+            player.translate(velocityX * delta, velocityY * delta);
+        }
 
 
     }

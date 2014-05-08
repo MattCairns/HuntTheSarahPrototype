@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -18,6 +20,10 @@ public class MainMenuScreen implements Screen {
     final Flameblade game;
 
     Stage stage;
+
+    //Load UI texture atlas from assets.
+    TextureAtlas atlas = new TextureAtlas("ui/ui_spritesheet.txt");
+    Skin skin;
 
     TextButton titleButton;
     TextButton playButton;
@@ -34,12 +40,18 @@ public class MainMenuScreen implements Screen {
         stage = new Stage(new FitViewport(800, 480));
         Gdx.input.setInputProcessor(stage);
 
+        //Add the atlas to a skin for the buttons.
+        skin = new Skin();
+        skin.addRegions(atlas);
         style = new TextButton.TextButtonStyle();
+        style.up = skin.getDrawable("buttonLong_brown");
+        style.down = skin.getDrawable("buttonLong_brown_pressed");
+
         style.font = game.font;
         titleButton = new TextButton("Flameblade", style);
-        titleButton.setPosition(400, 350);
+        titleButton.setPosition(400-95, 350);
         playButton = new TextButton("Click to Play", style);
-        playButton.setPosition(400, 250);
+        playButton.setPosition(400-95, 250);
 
         playButton.addListener(new InputListener() {
             @Override
@@ -58,7 +70,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render (float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0.247f, 0.486f, 0.714f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
