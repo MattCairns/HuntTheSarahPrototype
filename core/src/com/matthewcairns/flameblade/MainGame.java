@@ -5,6 +5,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 /**
@@ -16,6 +21,9 @@ public class MainGame implements Screen {
     SpriteBatch batch;
     OrthographicCamera camera;
 
+    TiledMap tiledMap;
+    TiledMapRenderer tiledMapRenderer;
+
     Player player;
 
     public MainGame(final Flameblade gam) {
@@ -24,16 +32,22 @@ public class MainGame implements Screen {
         player = new Player();
         batch = new SpriteBatch();
 
-
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
+        camera.update();
+
+        tiledMap = new TmxMapLoader().load("testmap.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.247f, 0.486f, 0.714f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        camera.update();
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render();
 
         batch.begin();
         player.draw(batch);

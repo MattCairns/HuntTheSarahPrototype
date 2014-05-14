@@ -3,8 +3,7 @@ package com.matthewcairns.flameblade;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,45 +16,95 @@ import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
  * All rights reserved.
  */
 public class Player {
-    //Load texture and create a rectangle matching the players size.
-    Texture texture = new Texture(Gdx.files.internal("player.png"));
-    Sprite player = new Sprite(texture, 64, 64);
+    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("elf_sprites.txt"));
 
-    Vector2 direction;
-    float speed = 30.0f;
-    Vector2 playerPos = new Vector2(400-player.getWidth()/2, 240-player.getHeight()/2);
-    Vector2 mousePos;
+    TextureRegion elfIdleLeft;
+    TextureRegion elfIdleRight;
+    TextureRegion elfIdleUp;
+    TextureRegion elfIdleDown;
+    Animation elfWalkLeft;
+    Animation elfWalkRight;
+    Animation elfWalkUp;
+    Animation elfWalkDown;
 
-    public Player() {
-        player.setPosition(400-32, 240-32);
+    float x;
+    float y;
+
+    float SPEED = 5.0f;
+
+    float stateTime = 0.0f;
+
+    public enum State {
+        IDLE, WALKING, DYING, SHOOTING;
     }
 
+    State state = State.IDLE;
+    boolean facingLeft = true;
+
+
+    public Player() {
+        x = 400.0f;
+        y = 240.0f;
+
+        elfIdleRight = atlas.findRegion("elf_prone_right");
+        elfIdleLeft = atlas.findRegion("elf_prone_left");
+        elfIdleUp = atlas.findRegion("elf_prone_up");
+        elfIdleDown = atlas.findRegion("elf_prone_down");
+
+        TextureRegion[] elfRightFrames = new TextureRegion[2];
+        elfRightFrames[0] = atlas.findRegion("elf_walk_right_one");
+        elfRightFrames[1] = atlas.findRegion("elf_walk_right_two");
+        elfWalkRight = new Animation(0.5f, elfRightFrames);
+
+        TextureRegion[] elfLeftFrames = new TextureRegion[2];
+        elfLeftFrames[0] = atlas.findRegion("elf_walk_left_one");
+        elfLeftFrames[1] = atlas.findRegion("elf_walk_left_two");
+        elfWalkLeft = new Animation(0.5f, elfLeftFrames);
+
+        TextureRegion[] elfUpFrames = new TextureRegion[2];
+        elfUpFrames[0] = atlas.findRegion("elf_walk_up_one");
+        elfUpFrames[1] = atlas.findRegion("elf_walk_up_two");
+        elfWalkUp = new Animation(0.5f, elfUpFrames);
+
+    }
+
+
     public void act(float delta) {
-        //Store position of mouse as a vector.
-        mousePos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-        Vector2 playerMouseAngle = mousePos.sub(playerPos);
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            facingLeft = true;
+            state = State.WALKING;
+            x -= SPEED;
 
-        System.out.println(playerMouseAngle.angle());
-        //Rotates the player to the position of the mouse.
-        player.setRotation(-playerMouseAngle.angle() - 90);
 
-        if(Gdx.input.isKeyPressed(Input.Keys.W)) {
-            float newAngle = (float) playerMouseAngle.angle();
-            direction = new Vector2((float) Math.cos(Math.toRadians(-playerMouseAngle.angle())), (float)Math.sin(Math.toRadians(-playerMouseAngle.angle())));
-
-            float velocityX  = 0;
-            float velocityY = 0;
-
-            velocityX += direction.x * 200.0f;
-            velocityY += direction.y * 200.0f;
-
-            player.translate(velocityX * delta, velocityY * delta);
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            facingLeft = false;
+            state = State.WALKING;
+            x += SPEED;
+        }
+
+        if (!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D))
+            state = State.IDLE;
 
 
     }
 
     public void draw(Batch batch) {
-        player.draw(batch);
+
+        stateTime += Gdx.graphics.getDeltaTime();
+        if(state == State.IDLE && facingLeft) {
+            batch.draw(elfIdleLeft, x, y);
+        }
+        if(state == State.IDLE && !facingLeft) {
+            batch.draw(elfIdleRight, x, y);
+        }
+
+        if(state == State.WALKING && facingLeft)
+            batch.draw(elfWalkLeft.getKeyFrame(stateTime, true), x, y);
+
+        else if(state == State.WALKING)
+            batch.draw(elfWalkRight.getKeyFrame(stateTime, true), x, y);
+
     }
+
 }
