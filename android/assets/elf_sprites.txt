@@ -2,114 +2,86 @@ elf_sprites.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-elf_down_walk_one
-  rotate: true
-  xy: 2, 362
-  size: 28, 32
-  orig: 32, 32
-  offset: 4, 0
-  index: -1
-elf_down_walk_two
-  rotate: true
-  xy: 2, 332
-  size: 28, 32
-  orig: 32, 32
-  offset: 4, 0
-  index: -1
 elf_micro
-  rotate: true
-  xy: 2, 498
+  rotate: false
+  xy: 432, 2
   size: 12, 16
   orig: 32, 32
   offset: 11, 5
   index: -1
 elf_prone_down
-  rotate: true
-  xy: 2, 302
+  rotate: false
+  xy: 266, 2
   size: 28, 32
   orig: 32, 32
   offset: 4, 0
   index: -1
 elf_prone_left
   rotate: false
-  xy: 2, 206
+  xy: 172, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 elf_prone_right
   rotate: false
-  xy: 2, 172
+  xy: 138, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 elf_prone_up
-  rotate: true
-  xy: 2, 448
+  rotate: false
+  xy: 382, 2
   size: 26, 28
   orig: 32, 32
   offset: 5, 3
   index: -1
-elf_right1
-  rotate: false
-  xy: 2, 138
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
 elf_small
   rotate: false
-  xy: 2, 476
+  xy: 410, 2
   size: 20, 20
   orig: 32, 32
   offset: 11, 5
   index: -1
 elf_up_shoot
-  rotate: false
-  xy: 2, 272
+  rotate: true
+  xy: 296, 2
   size: 32, 28
   orig: 32, 32
   offset: 0, 3
   index: -1
-elf_up_walk_one
-  rotate: true
-  xy: 2, 420
-  size: 26, 32
+elf_walk_down_one
+  rotate: false
+  xy: 236, 2
+  size: 28, 32
   orig: 32, 32
-  offset: 5, 0
+  offset: 4, 0
   index: -1
-elf_up_walk_two
-  rotate: true
-  xy: 2, 392
-  size: 26, 32
+elf_walk_down_two
+  rotate: false
+  xy: 206, 2
+  size: 28, 32
   orig: 32, 32
-  offset: 5, 0
-  index: -1
-elf_walk_
-  rotate: true
-  xy: 2, 240
-  size: 30, 32
-  orig: 32, 32
-  offset: 2, 0
+  offset: 4, 0
   index: -1
 elf_walk_left_one
   rotate: false
-  xy: 2, 104
+  xy: 104, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 elf_walk_left_two
   rotate: false
-  xy: 2, 70
+  xy: 70, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 elf_walk_right_one
   rotate: false
-  xy: 2, 36
+  xy: 36, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -120,4 +92,18 @@ elf_walk_right_two
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
+  index: -1
+elf_walk_up_one
+  rotate: false
+  xy: 354, 2
+  size: 26, 32
+  orig: 32, 32
+  offset: 5, 0
+  index: -1
+elf_walk_up_two
+  rotate: false
+  xy: 326, 2
+  size: 26, 32
+  orig: 32, 32
+  offset: 5, 0
   index: -1

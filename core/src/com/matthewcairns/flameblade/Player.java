@@ -38,7 +38,12 @@ public class Player {
         IDLE, WALKING, DYING, SHOOTING;
     }
 
+    public enum FaceState {
+        LEFT, RIGHT, UP, DOWN;
+    }
+
     State state = State.IDLE;
+    FaceState faceState = FaceState.RIGHT;
     boolean facingLeft = true;
 
 
@@ -66,24 +71,44 @@ public class Player {
         elfUpFrames[1] = atlas.findRegion("elf_walk_up_two");
         elfWalkUp = new Animation(0.5f, elfUpFrames);
 
+        TextureRegion[] elfDownFrames = new TextureRegion[2];
+        elfDownFrames[0] = atlas.findRegion("elf_walk_down_one");
+        elfDownFrames[1] = atlas.findRegion("elf_walk_down_two");
+        elfWalkDown = new Animation(0.5f, elfDownFrames);
+
     }
 
 
     public void act(float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            facingLeft = true;
+            faceState = FaceState.LEFT;
             state = State.WALKING;
             x -= SPEED;
 
 
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            facingLeft = false;
+            faceState = FaceState.RIGHT;
             state = State.WALKING;
             x += SPEED;
         }
 
-        if (!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D))
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            faceState = FaceState.UP;
+            state = State.WALKING;
+            y += SPEED;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            faceState = FaceState.DOWN;
+            state = State.WALKING;
+            y -= SPEED;
+        }
+
+        if (!Gdx.input.isKeyPressed(Input.Keys.A) &&
+            !Gdx.input.isKeyPressed(Input.Keys.D) &&
+            !Gdx.input.isKeyPressed(Input.Keys.W) &&
+            !Gdx.input.isKeyPressed(Input.Keys.S))
             state = State.IDLE;
 
 
@@ -92,18 +117,30 @@ public class Player {
     public void draw(Batch batch) {
 
         stateTime += Gdx.graphics.getDeltaTime();
-        if(state == State.IDLE && facingLeft) {
+        if(state == State.IDLE && faceState == FaceState.LEFT) {
             batch.draw(elfIdleLeft, x, y);
         }
-        if(state == State.IDLE && !facingLeft) {
+        if(state == State.IDLE && faceState == FaceState.RIGHT) {
             batch.draw(elfIdleRight, x, y);
         }
+        if(state == State.IDLE && faceState == FaceState.UP) {
+            batch.draw(elfIdleUp, x, y);
+        }
+        if(state == State.IDLE && faceState == FaceState.DOWN) {
+            batch.draw(elfIdleDown, x, y);
+        }
 
-        if(state == State.WALKING && facingLeft)
+        if(state == State.WALKING && faceState == FaceState.LEFT)
             batch.draw(elfWalkLeft.getKeyFrame(stateTime, true), x, y);
 
-        else if(state == State.WALKING)
+        if(state == State.WALKING && faceState == FaceState.RIGHT)
             batch.draw(elfWalkRight.getKeyFrame(stateTime, true), x, y);
+
+        if(state == State.WALKING && faceState == FaceState.UP)
+            batch.draw(elfWalkUp.getKeyFrame(stateTime, true), x, y);
+
+        if(state == State.WALKING && faceState == FaceState.DOWN)
+            batch.draw(elfWalkDown.getKeyFrame(stateTime, true), x, y);
 
     }
 
