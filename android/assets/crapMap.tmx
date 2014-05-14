@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="10" height="10" tilewidth="64" tileheight="64">
+ <tileset firstgid="1" name="tileset" tilewidth="64" tileheight="64">
+  <image source="RPGpack_sheet_2X.png" width="2560" height="1664"/>
+ </tileset>
+ <layer name="Ground" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJyFzrsRglAARNGXqxCKLQhEfuhDNAKkDz8RKn2oHQGSIXTCDXfejGNwZmc32s4Y80X3I3sMWMJHgFC6ve8QY4+DdHs/4YwLrtLt/YkX3phgihkcuJL6Y4U1Ntgikq4/EqTIcEQuXX8UuOGOB0rp+q9CjUbygxZzeFj8yRFa6yf3
+  </data>
+ </layer>
+ <layer name="Tile Layer 3" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBh+wJiZgcGEmbC6aKCaGCLU0RMAALx8ASs=
+  </data>
+ </layer>
+ <layer name="Folliage" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJy7x8DAcB+I7+GgHwDxQwbSwEUmBoZLTNjlFJkZGJSYIeyfQDW/cKjzBKrxAuKrQPlrONSAQCFQTREQ/wWq+YdH3UygmlnMqGLGQL4JENcCsS4Q6wGxPhAboKmLBvJjgHgpEIcCcRgQhwNxBJo6agAAntIXhA==
+  </data>
+ </layer>
+</map>
