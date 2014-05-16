@@ -2,6 +2,7 @@ package com.matthewcairns.flameblade;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -27,23 +28,21 @@ public class Player {
     Animation elfWalkUp;
     Animation elfWalkDown;
 
+    private Sound walkingSound;
+    private float timeSinceLastStep = 0.0f;
 
     float oldX;
     float oldY;
 
-
     float VELOCITY = 200.0f;
-
     float stateTime = 0.0f;
 
     public enum State {
         IDLE, WALKING, DYING, SHOOTING;
     }
-
     public enum FaceState {
         LEFT, RIGHT, UP, DOWN;
     }
-
     State state = State.IDLE;
     FaceState faceState = FaceState.RIGHT;
 
@@ -51,32 +50,37 @@ public class Player {
     public Player() {
         playerRec = new Rectangle(400.0f, 300.0f, 32.0f, 32.0f);
 
-
+        //Sprite to display when player is stationary.
         elfIdleRight = atlas.findRegion("elf_prone_right");
         elfIdleLeft = atlas.findRegion("elf_prone_left");
         elfIdleUp = atlas.findRegion("elf_prone_up");
         elfIdleDown = atlas.findRegion("elf_prone_down");
 
+        //Animation for walking right
         TextureRegion[] elfRightFrames = new TextureRegion[2];
         elfRightFrames[0] = atlas.findRegion("elf_walk_right_one");
         elfRightFrames[1] = atlas.findRegion("elf_walk_right_two");
         elfWalkRight = new Animation(0.5f, elfRightFrames);
 
+        //Animation for walking left
         TextureRegion[] elfLeftFrames = new TextureRegion[2];
         elfLeftFrames[0] = atlas.findRegion("elf_walk_left_one");
         elfLeftFrames[1] = atlas.findRegion("elf_walk_left_two");
         elfWalkLeft = new Animation(0.5f, elfLeftFrames);
 
+        //Animation for walking up
         TextureRegion[] elfUpFrames = new TextureRegion[2];
         elfUpFrames[0] = atlas.findRegion("elf_walk_up_one");
         elfUpFrames[1] = atlas.findRegion("elf_walk_up_two");
         elfWalkUp = new Animation(0.5f, elfUpFrames);
 
+        //Animation for walking down.
         TextureRegion[] elfDownFrames = new TextureRegion[2];
         elfDownFrames[0] = atlas.findRegion("elf_walk_down_one");
         elfDownFrames[1] = atlas.findRegion("elf_walk_down_two");
         elfWalkDown = new Animation(0.5f, elfDownFrames);
 
+        walkingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/footstep06.ogg"));
     }
 
 
@@ -154,6 +158,25 @@ public class Player {
         if(state == State.WALKING && faceState == FaceState.DOWN)
             batch.draw(elfWalkDown.getKeyFrame(stateTime, true), playerRec.getX(), playerRec.getY());
 
+
+
+    }
+
+    public Rectangle getRectangle() { return playerRec; }
+    public String getFaceState() {
+        if(faceState == FaceState.UP) {
+            return "UP";
+        }
+        if(faceState == FaceState.DOWN) {
+            return "DOWN";
+        }
+        if(faceState == FaceState.LEFT) {
+            return "LEFT";
+        }
+        if(faceState == FaceState.RIGHT) {
+            return "RIGHT";
+        }
+        return null;
     }
 
 }

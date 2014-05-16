@@ -1,6 +1,7 @@
 package com.matthewcairns.flameblade;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,6 +12,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Matthew Cairns on 06/05/2014.
@@ -23,6 +27,10 @@ public class MainGame implements Screen {
 
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
+
+    List<Bullet> bullets = new ArrayList<Bullet>();
+    float bullet_time = 0.2f;
+    float time_since_last_fire = 0.0f;
 
     Player player;
 
@@ -45,12 +53,23 @@ public class MainGame implements Screen {
         Gdx.gl.glClearColor(0.247f, 0.486f, 0.714f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        time_since_last_fire += Gdx.graphics.getDeltaTime();
+
         camera.update();
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && time_since_last_fire >= bullet_time) {
+            bullets.add(new Bullet(player.getRectangle(), player.getFaceState()));
+            time_since_last_fire = 0.0f;
+        }
+
 
         batch.begin();
         player.draw(batch);
+
+        for(Bullet element : bullets) {
+            element.draw(batch);
+        }
         batch.end();
 
 
