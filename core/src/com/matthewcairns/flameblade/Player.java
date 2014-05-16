@@ -2,14 +2,13 @@ package com.matthewcairns.flameblade;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 
 /**
  * Created by Matthew Cairns on 06/05/2014.
@@ -17,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
  */
 public class Player {
     TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("elf_sprites.txt"));
+    Rectangle playerRec;
 
     TextureRegion elfIdleLeft;
     TextureRegion elfIdleRight;
@@ -27,10 +27,12 @@ public class Player {
     Animation elfWalkUp;
     Animation elfWalkDown;
 
-    float x;
-    float y;
 
-    float SPEED = 5.0f;
+    float oldX;
+    float oldY;
+
+
+    float VELOCITY = 200.0f;
 
     float stateTime = 0.0f;
 
@@ -44,12 +46,11 @@ public class Player {
 
     State state = State.IDLE;
     FaceState faceState = FaceState.RIGHT;
-    boolean facingLeft = true;
 
 
     public Player() {
-        x = 400.0f;
-        y = 240.0f;
+        playerRec = new Rectangle(400.0f, 300.0f, 32.0f, 32.0f);
+
 
         elfIdleRight = atlas.findRegion("elf_prone_right");
         elfIdleLeft = atlas.findRegion("elf_prone_left");
@@ -79,30 +80,31 @@ public class Player {
     }
 
 
-    public void act(float delta) {
+    public void act(float delta, TiledMap map) {
+        oldX = playerRec.getX();
+        oldY = playerRec.getY();
+
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             faceState = FaceState.LEFT;
             state = State.WALKING;
-            x -= SPEED;
-
-
+            playerRec.x -= VELOCITY * delta;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             faceState = FaceState.RIGHT;
             state = State.WALKING;
-            x += SPEED;
+            playerRec.x += VELOCITY * delta;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             faceState = FaceState.UP;
             state = State.WALKING;
-            y += SPEED;
+            playerRec.y += VELOCITY * delta;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             faceState = FaceState.DOWN;
             state = State.WALKING;
-            y -= SPEED;
+            playerRec.y -= VELOCITY * delta;
         }
 
         if (!Gdx.input.isKeyPressed(Input.Keys.A) &&
@@ -111,36 +113,46 @@ public class Player {
             !Gdx.input.isKeyPressed(Input.Keys.S))
             state = State.IDLE;
 
+        //Load all of the objects from the collide layer and check if they overlap the player
+        MapObjects objects = map.getLayers().get("collide").getObjects();
+        for(RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
+            Rectangle rectangle = rectangleObject.getRectangle();
+            if (Intersector.overlaps(rectangle, playerRec)) {
+                playerRec.x = oldX;
+                playerRec.y = oldY;
+
+            }
+        }
+
 
     }
 
     public void draw(Batch batch) {
-
         stateTime += Gdx.graphics.getDeltaTime();
         if(state == State.IDLE && faceState == FaceState.LEFT) {
-            batch.draw(elfIdleLeft, x, y);
+            batch.draw(elfIdleLeft, playerRec.getX(), playerRec.getY());
         }
         if(state == State.IDLE && faceState == FaceState.RIGHT) {
-            batch.draw(elfIdleRight, x, y);
+            batch.draw(elfIdleRight, playerRec.getX(), playerRec.getY());
         }
         if(state == State.IDLE && faceState == FaceState.UP) {
-            batch.draw(elfIdleUp, x, y);
+            batch.draw(elfIdleUp, playerRec.getX(), playerRec.getY());
         }
         if(state == State.IDLE && faceState == FaceState.DOWN) {
-            batch.draw(elfIdleDown, x, y);
+            batch.draw(elfIdleDown, playerRec.getX(), playerRec.getY());
         }
 
         if(state == State.WALKING && faceState == FaceState.LEFT)
-            batch.draw(elfWalkLeft.getKeyFrame(stateTime, true), x, y);
+            batch.draw(elfWalkLeft.getKeyFrame(stateTime, true), playerRec.getX(), playerRec.getY());
 
         if(state == State.WALKING && faceState == FaceState.RIGHT)
-            batch.draw(elfWalkRight.getKeyFrame(stateTime, true), x, y);
+            batch.draw(elfWalkRight.getKeyFrame(stateTime, true), playerRec.getX(), playerRec.getY());
 
         if(state == State.WALKING && faceState == FaceState.UP)
-            batch.draw(elfWalkUp.getKeyFrame(stateTime, true), x, y);
+            batch.draw(elfWalkUp.getKeyFrame(stateTime, true),playerRec.getX(), playerRec.getY());
 
         if(state == State.WALKING && faceState == FaceState.DOWN)
-            batch.draw(elfWalkDown.getKeyFrame(stateTime, true), x, y);
+            batch.draw(elfWalkDown.getKeyFrame(stateTime, true), playerRec.getX(), playerRec.getY());
 
     }
 

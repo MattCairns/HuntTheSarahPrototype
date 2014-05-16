@@ -54,7 +54,7 @@ public class MainGame implements Screen {
         batch.end();
 
 
-        player.act(Gdx.graphics.getDeltaTime());
+        player.act(Gdx.graphics.getDeltaTime(), tiledMap);
     }
 
     @Override

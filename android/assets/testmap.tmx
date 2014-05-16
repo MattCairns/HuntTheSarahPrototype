@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="25" height="25" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="dd" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32">
   <image source="../gaunt.png" width="1280" height="768"/>
+  <tile id="641">
+   <properties>
+    <property name="block" value=""/>
+   </properties>
+  </tile>
  </tileset>
- <layer name="Tile Layer 1" width="25" height="25">
+ <layer name="main" width="25" height="25">
   <data encoding="base64" compression="zlib">
-   eJxjZGBgYBwkWI8OdqwctWPY2HGOSHyRDv74OWrHoLJDEUgo48HhaOpDgfgsFNPabaOYgWEWkJgBxDMZIWx8aucy4sbzCOiF4UNEqsOGjxGp9xWZdhxkxG8HPxMDgwAQCwKxEBP5doiSqZcUO2hp/ijGjgE34yMW
+   eJztwwEJAAAMA6C9yPrHXI6Dgr2kqqq+OkDdS7A=
   </data>
  </layer>
+ <layer name="walls" width="25" height="25">
+  <data encoding="base64" compression="zlib">
+   eJxjYCAerIRiWgJamz9qx6gdo3bQxo6TJOCLlDuTIFBkZGBQwoJHweADc4DxMheI51EQPzOAemcC8SwcZhwBih8F4mNUSAOHcJjxBij+FojfUcGOV3jMEGWizGwBoH5BIBai0JxRMPAAAOHTHPQ=
+  </data>
+ </layer>
+ <objectgroup name="collide" width="25" height="25">
+  <object x="354" y="-1" width="22" height="413"/>
+  <object x="377" y="382" width="167" height="33"/>
+  <object x="-1" y="352" width="357" height="31"/>
+  <object x="321" y="543" width="91" height="33"/>
+  <object x="386" y="572" width="27" height="98"/>
+  <object x="319" y="640" width="93" height="30"/>
+  <object x="576" y="512" width="92" height="94"/>
+  <object x="608" y="605" width="32" height="32"/>
+ </objectgroup>
 </map>
