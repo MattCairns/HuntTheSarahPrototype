@@ -49,7 +49,7 @@ public class Player {
 
 
     public Player() {
-        playerRec = new Rectangle(400.0f, 300.0f, 32.0f, 32.0f);
+        playerRec = new Rectangle(400.0f, 250.0f, 32.0f, 32.0f);
 
         //Sprite to display when player is stationary.
         elfIdleRight = atlas.findRegion("elf_idle_right");

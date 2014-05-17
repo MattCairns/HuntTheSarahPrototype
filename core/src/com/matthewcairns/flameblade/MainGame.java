@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -34,6 +35,8 @@ public class MainGame implements Screen {
 
     Player player;
 
+    Utils utils = new Utils();
+
     public MainGame(final Flameblade gam) {
         game = gam;
 
@@ -50,7 +53,7 @@ public class MainGame implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.247f, 0.486f, 0.714f, 1);
+        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         time_since_last_fire += Gdx.graphics.getDeltaTime();
@@ -71,7 +74,21 @@ public class MainGame implements Screen {
         for(Bullet element : bullets) {
             element.draw(batch);
         }
+        //Create a deep copy of all the bullets then iterate over them.
+        List<Bullet> copy = new ArrayList<Bullet>(bullets.size());
+        for(Bullet bullet : bullets) copy.add(bullet);
+        for(Bullet bullet : copy) {
+            //If the bullets collides with a wall then explode and remove from list.
+            if(Utils.wallCollision(tiledMap, bullet.getRectangle())) {
+                utils.explode(batch, bullet.getRectangle().getX(), bullet.getRectangle().getY());
+                bullets.remove(bullet);
+            }
+
+        }
         batch.end();
+
+
+
 
 
         player.act(Gdx.graphics.getDeltaTime(), tiledMap);

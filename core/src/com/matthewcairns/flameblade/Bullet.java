@@ -3,6 +3,7 @@ package com.matthewcairns.flameblade;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
  * All rights reserved.
  */
 public class Bullet {
-    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("arrow_spritesheet.txt"));
+    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("elf_sprites.txt"));
     Rectangle arrow;
 
     TextureRegion arrowImage;
@@ -25,13 +26,14 @@ public class Bullet {
 
     public Bullet(Rectangle player, String direction) {
         if(direction.equals("UP"))
-            arrowImage = atlas.findRegion("arrow_down");
-        if(direction.equals("DOWN"))
             arrowImage = atlas.findRegion("arrow_up");
+        if(direction.equals("DOWN"))
+            arrowImage = atlas.findRegion("arrow_down");
         if(direction.equals("LEFT"))
-            arrowImage = atlas.findRegion("arrow_right");
-        if(direction.equals("RIGHT"))
             arrowImage = atlas.findRegion("arrow_left");
+        if(direction.equals("RIGHT"))
+            arrowImage = atlas.findRegion("arrow_right");
+
         arrow = new Rectangle(player.x, player.y, 32.0f, 32.0f);
 
 
@@ -52,6 +54,10 @@ public class Bullet {
             arrow.x -= VELOCITY * delta;
         if(arrow_dir.equals("RIGHT"))
             arrow.x += VELOCITY * delta;
+    }
+
+    public Rectangle getRectangle() {
+        return arrow;
     }
 
 }
