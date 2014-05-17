@@ -32,6 +32,7 @@ public class MainMenuScreen implements Screen {
     OrthographicCamera camera;
 
     public MainMenuScreen(final Flameblade gam) {
+
         game = gam;
 
         camera = new OrthographicCamera();

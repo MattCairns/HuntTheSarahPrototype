@@ -14,7 +14,7 @@ public class Flameblade extends Game {
 
         font = new BitmapFont();
 
-        this.setScreen(new MainMenuScreen(this));
+        this.setScreen(new MainGame(this));
 	}
 
 	@Override

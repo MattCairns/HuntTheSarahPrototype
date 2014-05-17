@@ -177,3 +177,31 @@ elf_walk_up_two
   orig: 32, 32
   offset: 0, 0
   index: -1
+small_explosion_four
+  rotate: false
+  xy: 853, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+small_explosion_one
+  rotate: false
+  xy: 887, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+small_explosion_three
+  rotate: false
+  xy: 921, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+small_explosion_two
+  rotate: false
+  xy: 955, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

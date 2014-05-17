@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="25" height="25" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32">
-  <image source="../gaunt.png" width="1280" height="768"/>
-  <tile id="641">
-   <properties>
-    <property name="block" value=""/>
-   </properties>
-  </tile>
+<map version="1.0" orientation="orthogonal" width="35" height="35" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="gaunt" tilewidth="32" tileheight="32">
+  <image source="gaunt.png" width="1280" height="768"/>
  </tileset>
- <layer name="main" width="25" height="25">
+ <layer name="Floor" width="35" height="35">
   <data encoding="base64" compression="zlib">
-   eJztwwEJAAAMA6C9yPrHXI6Dgr2kqqq+OkDdS7A=
+   eJzt0jEKACAMQ9Hi6q17cldxEqwa6x+CS6mPEi9mTgghxGpwlCwrHhXLDgeWnF152TI7f/Mu4z4suhaFvih1N6Nl7Fz/Rv8ReZvZWSxYfrREu09ZsqQBOZ2kMw==
   </data>
  </layer>
- <layer name="walls" width="25" height="25">
+ <layer name="Walls" width="35" height="35">
   <data encoding="base64" compression="zlib">
-   eJxjYCAerIRiWgJamz9qx6gdo3bQxo6TJOCLlDuTIFBkZGBQwoJHweADc4DxMheI51EQPzOAemcC8SwcZhwBih8F4mNUSAOHcJjxBij+FojfUcGOV3jMEGWizGwBoH5BIBai0JxRMPAAAOHTHPQ=
+   eJxjYBgFo2AUjIKBAedogC+S6ZZGcj2BB6wkU9+oW7CDUbdgB+huCQXiCzgwsfljJZnu+UmCWmLNH25umcPIwDAXiOcxUu4WcgCyW0SZGBheMkJoUuyYAdQzE4hnMVLPLYQALjsOAN1wEIgPDQK3vGCEhOerQeAWAWCcCgKxENPAu4Vcdehg1C3YgSIwvSnhweFodmgSgcl1iwmOsoRSteSAUbdQbv5gcgvPIHILrcNlMiNpeBRQHwAAW69PIQ==
   </data>
  </layer>
- <objectgroup name="collide" width="25" height="25">
-  <object x="354" y="-1" width="22" height="413"/>
-  <object x="377" y="382" width="167" height="33"/>
-  <object x="-1" y="352" width="357" height="31"/>
-  <object x="321" y="543" width="91" height="33"/>
-  <object x="386" y="572" width="27" height="98"/>
-  <object x="319" y="640" width="93" height="30"/>
-  <object x="576" y="512" width="92" height="94"/>
-  <object x="608" y="605" width="32" height="32"/>
+ <objectgroup name="Collide" width="35" height="35">
+  <object x="258" y="252" width="698" height="32"/>
+  <object x="930" y="281" width="34" height="551"/>
+  <object x="638" y="805" width="297" height="11"/>
+  <object x="811" y="579" width="41" height="16"/>
+  <object x="865" y="572" width="27" height="36"/>
+  <object x="874" y="612" width="11" height="47"/>
+  <object x="867" y="669" width="26" height="33"/>
+  <object x="809" y="675" width="44" height="14"/>
+  <object x="256" y="282" width="30" height="547"/>
+  <object x="285" y="801" width="256" height="30"/>
+  <object x="386" y="448" width="248" height="29"/>
+  <object x="605" y="476" width="33" height="577"/>
+  <object x="256" y="821" width="30" height="232"/>
+  <object x="284" y="1019" width="323" height="34"/>
+  <object x="352" y="543" width="91" height="31"/>
+  <object x="420" y="575" width="24" height="32"/>
+  <object x="351" y="571" width="28" height="33"/>
  </objectgroup>
 </map>
