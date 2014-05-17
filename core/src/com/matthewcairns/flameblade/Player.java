@@ -119,19 +119,10 @@ public class Player {
             state = State.IDLE;
 
         //Load all of the objects from the collide layer and check if they overlap the player
-        for(MapObject object :  map.getLayers().get("collide").getObjects()) {
-            if(object instanceof RectangleMapObject) {
-                Rectangle rect = ((RectangleMapObject) object).getRectangle();
-                if (Intersector.overlaps(rect, playerRec)) {
-                    playerRec.x = oldX;
-                    playerRec.y = oldY;
-
-                }
-            }
-
+        if(Utils.wallCollision(map, playerRec)) {
+            playerRec.x = oldX;
+            playerRec.y = oldY;
         }
-
-
     }
 
     public void draw(Batch batch) {
