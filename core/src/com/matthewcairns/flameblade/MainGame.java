@@ -39,6 +39,7 @@ public class MainGame implements Screen {
     float time_since_last_fire = 0.0f;
 
     Player player;
+    Enemy enemy;
 
     Utils utils = new Utils();
 
@@ -61,6 +62,7 @@ public class MainGame implements Screen {
         Rectangle rect = ((RectangleMapObject)spawn).getRectangle();
 
         player = new Player(rect.getX(), rect.getY());
+        enemy = new Enemy(300, 230);
     }
 
     @Override
@@ -83,6 +85,7 @@ public class MainGame implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         player.draw(batch);
+        enemy.draw(batch);
         for(Bullet element : bullets) {
             element.draw(batch);
         }
@@ -104,6 +107,7 @@ public class MainGame implements Screen {
 
 
         player.act(Gdx.graphics.getDeltaTime(), tiledMap);
+        enemy.act(tiledMap, player.getRectangle());
     }
 
     @Override
