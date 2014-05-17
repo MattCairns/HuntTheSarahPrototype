@@ -47,7 +47,6 @@ public class Player {
     State state = State.IDLE;
     FaceState faceState = FaceState.RIGHT;
 
-
     public Player() {
         playerRec = new Rectangle(400.0f, 250.0f, 32.0f, 32.0f);
 
@@ -58,28 +57,16 @@ public class Player {
         elfIdleDown = atlas.findRegion("elf_idle_down");
 
         //Animation for walking right
-        TextureRegion[] elfRightFrames = new TextureRegion[2];
-        elfRightFrames[0] = atlas.findRegion("elf_walk_right_one");
-        elfRightFrames[1] = atlas.findRegion("elf_walk_right_two");
-        elfWalkRight = new Animation(0.5f, elfRightFrames);
+        elfWalkRight = Utils.createAnimation(atlas, new String[]{"elf_walk_right_one", "elf_walk_right_two"}, 0.5f);
 
         //Animation for walking left
-        TextureRegion[] elfLeftFrames = new TextureRegion[2];
-        elfLeftFrames[0] = atlas.findRegion("elf_walk_left_one");
-        elfLeftFrames[1] = atlas.findRegion("elf_walk_left_two");
-        elfWalkLeft = new Animation(0.5f, elfLeftFrames);
+        elfWalkLeft = Utils.createAnimation(atlas, new String[]{"elf_walk_left_one", "elf_walk_left_two"}, 0.5f);
 
         //Animation for walking up
-        TextureRegion[] elfUpFrames = new TextureRegion[2];
-        elfUpFrames[0] = atlas.findRegion("elf_walk_up_one");
-        elfUpFrames[1] = atlas.findRegion("elf_walk_up_two");
-        elfWalkUp = new Animation(0.5f, elfUpFrames);
+        elfWalkUp = Utils.createAnimation(atlas, new String[]{"elf_walk_up_one", "elf_walk_up_two"}, 0.5f);
 
         //Animation for walking down.
-        TextureRegion[] elfDownFrames = new TextureRegion[2];
-        elfDownFrames[0] = atlas.findRegion("elf_walk_down_one");
-        elfDownFrames[1] = atlas.findRegion("elf_walk_down_two");
-        elfWalkDown = new Animation(0.5f, elfDownFrames);
+        elfWalkDown = Utils.createAnimation(atlas, new String[]{"elf_walk_down_one", "elf_walk_down_two"}, 0.5f);
 
         walkingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/footstep06.ogg"));
     }

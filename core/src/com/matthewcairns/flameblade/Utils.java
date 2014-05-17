@@ -49,4 +49,15 @@ public class Utils {
         System.out.println(stateTime);
         batch.draw(explode.getKeyFrame(stateTime, true), x, y);
     }
+
+
+    public static Animation createAnimation(TextureAtlas atlas, String[] regions, float frameDuration) {
+        TextureRegion[] frames = new TextureRegion[regions.length];
+        System.out.println(regions.length);
+        for(int i = 0; i < frames.length; i++) {
+            System.out.println(regions[i]);
+            frames[i] = atlas.findRegion(regions[i]);
+        }
+        return new Animation(frameDuration, frames);
+    }
 }
