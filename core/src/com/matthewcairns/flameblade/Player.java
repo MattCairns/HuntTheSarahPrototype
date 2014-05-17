@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -51,10 +52,10 @@ public class Player {
         playerRec = new Rectangle(400.0f, 300.0f, 32.0f, 32.0f);
 
         //Sprite to display when player is stationary.
-        elfIdleRight = atlas.findRegion("elf_prone_right");
-        elfIdleLeft = atlas.findRegion("elf_prone_left");
-        elfIdleUp = atlas.findRegion("elf_prone_up");
-        elfIdleDown = atlas.findRegion("elf_prone_down");
+        elfIdleRight = atlas.findRegion("elf_idle_right");
+        elfIdleLeft = atlas.findRegion("elf_idle_left");
+        elfIdleUp = atlas.findRegion("elf_idle_up");
+        elfIdleDown = atlas.findRegion("elf_idle_down");
 
         //Animation for walking right
         TextureRegion[] elfRightFrames = new TextureRegion[2];
@@ -118,14 +119,16 @@ public class Player {
             state = State.IDLE;
 
         //Load all of the objects from the collide layer and check if they overlap the player
-        MapObjects objects = map.getLayers().get("collide").getObjects();
-        for(RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
-            Rectangle rectangle = rectangleObject.getRectangle();
-            if (Intersector.overlaps(rectangle, playerRec)) {
-                playerRec.x = oldX;
-                playerRec.y = oldY;
+        for(MapObject object :  map.getLayers().get("collide").getObjects()) {
+            if(object instanceof RectangleMapObject) {
+                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                if (Intersector.overlaps(rect, playerRec)) {
+                    playerRec.x = oldX;
+                    playerRec.y = oldY;
 
+                }
             }
+
         }
 
 

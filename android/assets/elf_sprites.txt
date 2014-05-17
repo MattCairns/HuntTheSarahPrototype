@@ -2,108 +2,178 @@ elf_sprites.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-elf_micro
-  rotate: false
-  xy: 432, 2
-  size: 12, 16
-  orig: 32, 32
-  offset: 11, 5
-  index: -1
-elf_prone_down
-  rotate: false
-  xy: 266, 2
-  size: 28, 32
-  orig: 32, 32
-  offset: 4, 0
-  index: -1
-elf_prone_left
-  rotate: false
-  xy: 172, 2
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-elf_prone_right
-  rotate: false
-  xy: 138, 2
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-elf_prone_up
-  rotate: false
-  xy: 382, 2
-  size: 26, 28
-  orig: 32, 32
-  offset: 5, 3
-  index: -1
-elf_small
-  rotate: false
-  xy: 410, 2
-  size: 20, 20
-  orig: 32, 32
-  offset: 11, 5
-  index: -1
-elf_up_shoot
-  rotate: true
-  xy: 296, 2
-  size: 32, 28
-  orig: 32, 32
-  offset: 0, 3
-  index: -1
-elf_walk_down_one
-  rotate: false
-  xy: 236, 2
-  size: 28, 32
-  orig: 32, 32
-  offset: 4, 0
-  index: -1
-elf_walk_down_two
-  rotate: false
-  xy: 206, 2
-  size: 28, 32
-  orig: 32, 32
-  offset: 4, 0
-  index: -1
-elf_walk_left_one
-  rotate: false
-  xy: 104, 2
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-elf_walk_left_two
-  rotate: false
-  xy: 70, 2
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-elf_walk_right_one
-  rotate: false
-  xy: 36, 2
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-elf_walk_right_two
+arrow_down
   rotate: false
   xy: 2, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+arrow_down_left
+  rotate: false
+  xy: 36, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+arrow_down_right
+  rotate: false
+  xy: 70, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+arrow_left
+  rotate: false
+  xy: 104, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+arrow_right
+  rotate: false
+  xy: 138, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+arrow_up
+  rotate: false
+  xy: 172, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+arrow_up_left
+  rotate: false
+  xy: 206, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+arrow_up_right
+  rotate: false
+  xy: 240, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_idle_down
+  rotate: false
+  xy: 274, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_idle_left
+  rotate: false
+  xy: 308, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_idle_right
+  rotate: false
+  xy: 342, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_idle_up
+  rotate: false
+  xy: 376, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_spin_four
+  rotate: false
+  xy: 410, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_spin_one
+  rotate: false
+  xy: 444, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_spin_three
+  rotate: false
+  xy: 478, 2
+  size: 33, 32
+  orig: 33, 32
+  offset: 0, 0
+  index: -1
+elf_spin_two
+  rotate: false
+  xy: 513, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_up_right_idle
+  rotate: false
+  xy: 547, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_walk_down_one
+  rotate: false
+  xy: 581, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_walk_down_two
+  rotate: false
+  xy: 615, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_walk_left_one
+  rotate: false
+  xy: 649, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_walk_left_two
+  rotate: false
+  xy: 683, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_walk_right_one
+  rotate: false
+  xy: 717, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_walk_right_two
+  rotate: false
+  xy: 751, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 elf_walk_up_one
   rotate: false
-  xy: 354, 2
-  size: 26, 32
+  xy: 785, 2
+  size: 32, 32
   orig: 32, 32
-  offset: 5, 0
+  offset: 0, 0
   index: -1
 elf_walk_up_two
   rotate: false
-  xy: 326, 2
-  size: 26, 32
+  xy: 819, 2
+  size: 32, 32
   orig: 32, 32
-  offset: 5, 0
+  offset: 0, 0
   index: -1

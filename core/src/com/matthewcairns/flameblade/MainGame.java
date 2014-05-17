@@ -55,7 +55,9 @@ public class MainGame implements Screen {
 
         time_since_last_fire += Gdx.graphics.getDeltaTime();
 
+        camera.position.set(player.getRectangle().getX()+16, player.getRectangle().getY() +16, 0);
         camera.update();
+
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && time_since_last_fire >= bullet_time) {
@@ -63,10 +65,9 @@ public class MainGame implements Screen {
             time_since_last_fire = 0.0f;
         }
 
-
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         player.draw(batch);
-
         for(Bullet element : bullets) {
             element.draw(batch);
         }
