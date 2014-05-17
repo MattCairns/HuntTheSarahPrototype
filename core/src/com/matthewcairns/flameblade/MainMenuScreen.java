@@ -48,7 +48,7 @@ public class MainMenuScreen implements Screen {
         style.down = skin.getDrawable("buttonLong_brown_pressed");
 
         style.font = game.font;
-        titleButton = new TextButton("Flameblade", style);
+        titleButton = new TextButton("Gauntlet II Clone", style);
         titleButton.setPosition(400-95, 350);
         playButton = new TextButton("Click to Play", style);
         playButton.setPosition(400-95, 250);
