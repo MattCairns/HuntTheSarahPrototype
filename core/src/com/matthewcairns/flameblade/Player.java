@@ -47,8 +47,8 @@ public class Player {
     State state = State.IDLE;
     FaceState faceState = FaceState.RIGHT;
 
-    public Player() {
-        playerRec = new Rectangle(400.0f, 250.0f, 32.0f, 32.0f);
+    public Player(float x, float y) {
+        playerRec = new Rectangle(x, y, 32.0f, 32.0f);
 
         //Sprite to display when player is stationary.
         elfIdleRight = atlas.findRegion("elf_idle_right");

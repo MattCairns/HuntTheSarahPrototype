@@ -100,4 +100,7 @@
   <object x="420" y="575" width="24" height="32"/>
   <object x="351" y="571" width="28" height="33"/>
  </objectgroup>
+ <objectgroup name="spawns" width="35" height="35">
+  <object name="spawn_point" x="316" y="968" width="26" height="26"/>
+ </objectgroup>
 </map>
