@@ -33,6 +33,15 @@ public class Bullet {
             arrowImage = atlas.findRegion("arrow_left");
         if(direction.equals("RIGHT"))
             arrowImage = atlas.findRegion("arrow_right");
+        if(direction.equals("UPLEFT"))
+            arrowImage = atlas.findRegion("arrow_up_left");
+        if(direction.equals("UPRIGHT"))
+            arrowImage = atlas.findRegion("arrow_up_right");
+        if(direction.equals("DOWNRIGHT"))
+            arrowImage = atlas.findRegion("arrow_down_right");
+        if(direction.equals("DOWNLEFT"))
+            arrowImage = atlas.findRegion("arrow_down_left");
+
 
         arrow = new Rectangle(player.x, player.y, 32.0f, 32.0f);
 
@@ -54,6 +63,22 @@ public class Bullet {
             arrow.x -= VELOCITY * delta;
         if(arrow_dir.equals("RIGHT"))
             arrow.x += VELOCITY * delta;
+        if(arrow_dir.equals("UPLEFT")) {
+            arrow.y += VELOCITY / 2 * delta;
+            arrow.x -= VELOCITY / 2 * delta;
+        }
+        if(arrow_dir.equals("UPRIGHT")) {
+            arrow.y += VELOCITY / 2 * delta;
+            arrow.x += VELOCITY / 2 * delta;
+        }
+        if(arrow_dir.equals("DOWNRIGHT")) {
+            arrow.x += VELOCITY / 2 * delta;
+            arrow.y -= VELOCITY / 2 * delta;
+        }
+        if(arrow_dir.equals("DOWNLEFT")) {
+            arrow.x -= VELOCITY / 2 * delta;
+            arrow.y -= VELOCITY / 2 * delta;
+        }
     }
 
     public Rectangle getRectangle() {
