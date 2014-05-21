@@ -15,7 +15,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.util.ArrayList;
@@ -37,6 +39,11 @@ public class MainGame implements Screen {
     List<Bullet> bullets = new ArrayList<Bullet>();
     float bullet_time = 0.2f;
     float time_since_last_fire = 0.0f;
+
+    //Box 2D world for physics simulation
+    World world = new World(new Vector2(0,0), true);
+    static final float WORLD_TO_BOX = 0.01f;
+    static final float BOX_TO_WORLD = 100.0f;
 
     Player player;
     Enemy enemy;
