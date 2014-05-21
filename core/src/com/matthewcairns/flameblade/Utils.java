@@ -32,9 +32,12 @@ public class Utils {
     //Checks if there has been a collision between the map walls and any object passed to the function.
     //Returns true if there is a collision.
     public static Boolean wallCollision(TiledMap map, Rectangle objectRec) {
+
         for(MapObject object :  map.getLayers().get("Collide").getObjects()) {
             if(object instanceof RectangleMapObject) {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                System.out.println(rect.getWidth());
+
                 if (Intersector.overlaps(rect, objectRec)) {
                    return true;
                 }

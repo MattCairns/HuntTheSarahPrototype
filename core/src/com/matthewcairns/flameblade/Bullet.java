@@ -64,20 +64,20 @@ public class Bullet {
         if(arrow_dir.equals("RIGHT"))
             arrow.x += VELOCITY * delta;
         if(arrow_dir.equals("UPLEFT")) {
-            arrow.y += VELOCITY / 2 * delta;
-            arrow.x -= VELOCITY / 2 * delta;
+            arrow.y += VELOCITY  * delta;
+            arrow.x -= VELOCITY  * delta;
         }
         if(arrow_dir.equals("UPRIGHT")) {
-            arrow.y += VELOCITY / 2 * delta;
-            arrow.x += VELOCITY / 2 * delta;
+            arrow.y += VELOCITY * delta;
+            arrow.x += VELOCITY * delta;
         }
         if(arrow_dir.equals("DOWNRIGHT")) {
-            arrow.x += VELOCITY / 2 * delta;
-            arrow.y -= VELOCITY / 2 * delta;
+            arrow.x += VELOCITY  * delta;
+            arrow.y -= VELOCITY  * delta;
         }
         if(arrow_dir.equals("DOWNLEFT")) {
-            arrow.x -= VELOCITY / 2 * delta;
-            arrow.y -= VELOCITY / 2 * delta;
+            arrow.x -= VELOCITY  * delta;
+            arrow.y -= VELOCITY  * delta;
         }
     }
 
