@@ -77,7 +77,7 @@ public class MainGame implements Screen {
         wallBodies = Utils.wallCollisionShapes(tiledMap, 32.0f, world);
 
         player = new Player(rect.getX(), rect.getY(), world);
-        enemy = new Enemy(300, 230);
+        enemy = new Enemy(300, 230, world);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class MainGame implements Screen {
         batch.end();
 
         player.act(Gdx.graphics.getDeltaTime(), tiledMap);
-//        enemy.act(tiledMap, player.getRectangle());
+        enemy.act(tiledMap, player.getBody());
 
         debugRenderer.render(world, camera.combined);
         world.step(1/60f, 6, 2);

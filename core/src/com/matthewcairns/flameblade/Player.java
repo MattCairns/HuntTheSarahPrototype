@@ -20,7 +20,6 @@ import com.badlogic.gdx.physics.box2d.*;
  */
 public class Player {
     TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("elf_sprites.txt"));
-    Rectangle playerRec;
     BodyDef bodyDef;
     Body player;
 
@@ -47,7 +46,7 @@ public class Player {
     float oldX;
     float oldY;
 
-    float VELOCITY = 200.0f;
+    float SPEED = 10000.0f;
     float WALK_SPEED = 0.2f;
     float stateTime = 0.0f;
 
@@ -66,15 +65,13 @@ public class Player {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
 
-        PolygonShape shape = new PolygonShape();
+        CircleShape shape = new CircleShape();
         Vector2 size = new Vector2(16, 16);
-        shape.setAsBox(32 * 0.5f,
-                       32 * 0.5f,
-                       size, 0.0f);
+        shape.setRadius(16.0f);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 0.5f;
+        fixtureDef.density = 0.0f;
         fixtureDef.friction = 0.8f;
 
         player = world.createBody(bodyDef);
@@ -128,28 +125,28 @@ public class Player {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             faceState = FaceState.LEFT;
             state = State.WALKING;
-            Vector2 vec = new Vector2(-5000.0f, 0.0f);
+            Vector2 vec = new Vector2(-SPEED, 0.0f);
             player.applyForce(vec, player.getWorldCenter(), true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             faceState = FaceState.RIGHT;
             state = State.WALKING;
-            Vector2 vec = new Vector2(5000.0f, 0.0f);
+            Vector2 vec = new Vector2(SPEED, 0.0f);
             player.applyForce(vec, player.getWorldCenter(), true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             faceState = FaceState.UP;
             state = State.WALKING;
-            Vector2 vec = new Vector2(0.0f, 5000.0f);
+            Vector2 vec = new Vector2(0.0f, SPEED);
             player.applyForce(vec, player.getWorldCenter(), true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             faceState = FaceState.DOWN;
             state = State.WALKING;
-            Vector2 vec = new Vector2(0.0f, -5000.0f);
+            Vector2 vec = new Vector2(0.0f, -SPEED);
             player.applyForce(vec, player.getWorldCenter(), true);
         }
 
@@ -178,6 +175,7 @@ public class Player {
             !Gdx.input.isKeyPressed(Input.Keys.W) &&
             !Gdx.input.isKeyPressed(Input.Keys.S))
             state = State.IDLE;
+            player.setLinearVelocity(0.0f, 0.0f);
 
 //        //Load all of the objects from the collide layer and check if they overlap the player
 //        if(Utils.wallCollision(map, playerRec)) {
