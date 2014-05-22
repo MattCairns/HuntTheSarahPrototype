@@ -67,9 +67,9 @@ public class Player {
         bodyDef.position.set(x, y);
 
         PolygonShape shape = new PolygonShape();
-        Vector2 size = new Vector2(16/32, 16/32);
-        shape.setAsBox(32 * 0.5f / 32,
-                       32 * 0.5f / 32,
+        Vector2 size = new Vector2(16, 16);
+        shape.setAsBox(32 * 0.5f,
+                       32 * 0.5f,
                        size, 0.0f);
 
         FixtureDef fixtureDef = new FixtureDef();
@@ -128,25 +128,29 @@ public class Player {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             faceState = FaceState.LEFT;
             state = State.WALKING;
-            player.applyForce(-500.0f, 0.0f, 0.0f, 0.0f, true);
+            Vector2 vec = new Vector2(-5000.0f, 0.0f);
+            player.applyForce(vec, player.getWorldCenter(), true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             faceState = FaceState.RIGHT;
             state = State.WALKING;
-            player.applyForce(500.0f, 0.0f, 0.0f, 0.0f, true);
+            Vector2 vec = new Vector2(5000.0f, 0.0f);
+            player.applyForce(vec, player.getWorldCenter(), true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             faceState = FaceState.UP;
             state = State.WALKING;
-            player.applyForce(0.0f, 500.0f, 0.0f, 0.0f, true);
+            Vector2 vec = new Vector2(0.0f, 5000.0f);
+            player.applyForce(vec, player.getWorldCenter(), true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             faceState = FaceState.DOWN;
             state = State.WALKING;
-            player.applyForce(0.0f, -500.0f, 0.0f, 0.0f, true);
+            Vector2 vec = new Vector2(0.0f, -5000.0f);
+            player.applyForce(vec, player.getWorldCenter(), true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -185,53 +189,53 @@ public class Player {
     public void draw(Batch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
         if(state == State.IDLE && faceState == FaceState.LEFT) {
-            batch.draw(elfIdleLeft, player.getPosition().x, player.getPosition().y);
+            batch.draw(elfIdleLeft, player.getWorldCenter().x-16, player.getWorldCenter().y-16);
         }
         if(state == State.IDLE && faceState == FaceState.RIGHT) {
-            batch.draw(elfIdleRight, player.getPosition().x, player.getPosition().y);
+            batch.draw(elfIdleRight, player.getWorldCenter().x-16, player.getWorldCenter().y-16);
         }
         if(state == State.IDLE && faceState == FaceState.UP) {
-            batch.draw(elfIdleUp, player.getPosition().x, player.getPosition().y);
+            batch.draw(elfIdleUp, player.getWorldCenter().x-16, player.getWorldCenter().y-16);
         }
         if(state == State.IDLE && faceState == FaceState.DOWN) {
-            batch.draw(elfIdleDown, player.getPosition().x, player.getPosition().y);
+            batch.draw(elfIdleDown, player.getWorldCenter().x-16, player.getWorldCenter().y-16);
         }
         if(state == State.IDLE && faceState == FaceState.UPLEFT) {
-            batch.draw(elfIdleUpLeft, player.getPosition().x, player.getPosition().y);
+            batch.draw(elfIdleUpLeft, player.getWorldCenter().x-16, player.getWorldCenter().y-16);
         }
         if(state == State.IDLE && faceState == FaceState.UPRIGHT) {
-            batch.draw(elfIdleUpRight, player.getPosition().x, player.getPosition().y);
+            batch.draw(elfIdleUpRight, player.getWorldCenter().x-16, player.getWorldCenter().y-16);
         }
         if(state == State.IDLE && faceState == FaceState.DOWNRIGHT) {
-            batch.draw(elfIdleDownRight, player.getPosition().x, player.getPosition().y);
-        }
+            batch.draw(elfIdleDownRight, player.getWorldCenter().x-16, player.getWorldCenter().y-16);
+    }
         if(state == State.IDLE && faceState == FaceState.DOWNLEFT) {
-            batch.draw(elfIdleDownLeft, player.getPosition().x, player.getPosition().y);
+            batch.draw(elfIdleDownLeft, player.getWorldCenter().x-16, player.getWorldCenter().y-16);
         }
 
         if(state == State.WALKING && faceState == FaceState.LEFT)
-            batch.draw(elfWalkLeft.getKeyFrame(stateTime, true), player.getPosition().x, player.getPosition().y);
+            batch.draw(elfWalkLeft.getKeyFrame(stateTime, true), player.getWorldCenter().x-16, player.getWorldCenter().y-16);
 
         if(state == State.WALKING && faceState == FaceState.RIGHT)
-            batch.draw(elfWalkRight.getKeyFrame(stateTime, true), player.getPosition().x, player.getPosition().y);
+            batch.draw(elfWalkRight.getKeyFrame(stateTime, true), player.getWorldCenter().x-16, player.getWorldCenter().y-16);
 
         if(state == State.WALKING && faceState == FaceState.UP)
-            batch.draw(elfWalkUp.getKeyFrame(stateTime, true), player.getPosition().x, player.getPosition().y);
+            batch.draw(elfWalkUp.getKeyFrame(stateTime, true), player.getWorldCenter().x-16, player.getWorldCenter().y-16);
 
         if(state == State.WALKING && faceState == FaceState.DOWN)
-            batch.draw(elfWalkDown.getKeyFrame(stateTime, true), player.getPosition().x, player.getPosition().y);
+            batch.draw(elfWalkDown.getKeyFrame(stateTime, true), player.getWorldCenter().x-16, player.getWorldCenter().y-16);
 
         if(state == State.WALKING && faceState == FaceState.UPLEFT)
-            batch.draw(elfWalkUpLeft.getKeyFrame(stateTime, true), player.getPosition().x, player.getPosition().y);
+            batch.draw(elfWalkUpLeft.getKeyFrame(stateTime, true), player.getWorldCenter().x-16, player.getWorldCenter().y-16);
 
         if(state == State.WALKING && faceState == FaceState.UPRIGHT)
-            batch.draw(elfWalkUpRight.getKeyFrame(stateTime, true), player.getPosition().x, player.getPosition().y);
+            batch.draw(elfWalkUpRight.getKeyFrame(stateTime, true), player.getWorldCenter().x-16, player.getWorldCenter().y-16);
 
         if(state == State.WALKING && faceState == FaceState.DOWNRIGHT)
-            batch.draw(elfWalkDownRight.getKeyFrame(stateTime, true), player.getPosition().x, player.getPosition().y);
+            batch.draw(elfWalkDownRight.getKeyFrame(stateTime, true), player.getWorldCenter().x-16, player.getWorldCenter().y-16);
 
         if(state == State.WALKING && faceState == FaceState.DOWNLEFT)
-            batch.draw(elfWalkDownLeft.getKeyFrame(stateTime, true), player.getPosition().x, player.getPosition().y);
+            batch.draw(elfWalkDownLeft.getKeyFrame(stateTime, true), player.getWorldCenter().x-16, player.getWorldCenter().y-16);
 
 
 

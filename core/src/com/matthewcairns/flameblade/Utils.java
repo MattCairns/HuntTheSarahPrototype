@@ -54,7 +54,7 @@ public class Utils {
             BodyDef bd = new BodyDef();
             bd.type = BodyDef.BodyType.StaticBody;
             Rectangle rec = ((RectangleMapObject) object).getRectangle();
-            bd.position.set(rec.getX(), rec.getY());
+            //bd.position.set(rec.getX(), rec.getY());
             fixtureDef.shape = shape;
 
             Body body = world.createBody(bd);
@@ -69,10 +69,10 @@ public class Utils {
     private static PolygonShape getRectangle(RectangleMapObject rectangleObject) {
         Rectangle rectangle = rectangleObject.getRectangle();
         PolygonShape polygon = new PolygonShape();
-        Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f) / ppt,
-                                   (rectangle.y + rectangle.height *0.5f) / ppt);
-        polygon.setAsBox(rectangle.width * 0.5f / ppt,
-                         rectangle.height * 0.5f / ppt,
+        Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f),
+                                   (rectangle.y + rectangle.height *0.5f));
+        polygon.setAsBox(rectangle.width * 0.5f,
+                         rectangle.height * 0.5f,
                          size, 0.0f);
         return polygon;
     }

@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -46,6 +47,7 @@ public class MainGame implements Screen {
 
     //Box 2D world for physics simulation
     World world = new World(new Vector2(0,0), true);
+    Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     static final float WORLD_TO_BOX = 0.01f;
     static final float BOX_TO_WORLD = 100.0f;
 
@@ -118,8 +120,9 @@ public class MainGame implements Screen {
         player.act(Gdx.graphics.getDeltaTime(), tiledMap);
 //        enemy.act(tiledMap, player.getRectangle());
 
-
+        debugRenderer.render(world, camera.combined);
         world.step(1/60f, 6, 2);
+
     }
 
     @Override
