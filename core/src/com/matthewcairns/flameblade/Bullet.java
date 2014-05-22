@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 
 /**
  * Created by Matthew Cairns on 16/05/2014.
@@ -15,36 +17,52 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class Bullet {
     TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("elf_sprites.txt"));
-    Rectangle arrow;
+    BodyDef bodyDef;
+    Body bullet;
 
-    TextureRegion arrowImage;
+    //TextureRegion arrowImage;
+    Texture arrowImage = new Texture(Gdx.files.internal("arrow_b2d.png"));
 
     Sound arrowShoot;
 
-    float VELOCITY = 500.0f;
+
+    float VELOCITY = 5000.0f;
     String arrow_dir;
 
-    public Bullet(Rectangle player, String direction) {
-        if(direction.equals("UP"))
-            arrowImage = atlas.findRegion("arrow_up");
-        if(direction.equals("DOWN"))
-            arrowImage = atlas.findRegion("arrow_down");
-        if(direction.equals("LEFT"))
-            arrowImage = atlas.findRegion("arrow_left");
-        if(direction.equals("RIGHT"))
-            arrowImage = atlas.findRegion("arrow_right");
-        if(direction.equals("UPLEFT"))
-            arrowImage = atlas.findRegion("arrow_up_left");
-        if(direction.equals("UPRIGHT"))
-            arrowImage = atlas.findRegion("arrow_up_right");
-        if(direction.equals("DOWNRIGHT"))
-            arrowImage = atlas.findRegion("arrow_down_right");
-        if(direction.equals("DOWNLEFT"))
-            arrowImage = atlas.findRegion("arrow_down_left");
+    public Bullet(Body player, String direction, World world) {
+        bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(player.getWorldCenter().x, player.getWorldCenter().y);
 
+        CircleShape shape = new CircleShape();
+        Vector2 size = new Vector2(16, 16);
+        shape.setRadius(5.0f);
 
-        arrow = new Rectangle(player.x, player.y, 32.0f, 32.0f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 0.0f;
+        fixtureDef.friction = 0.8f;
 
+        bullet = world.createBody(bodyDef);
+        bullet.createFixture(fixtureDef);
+        shape.dispose();
+
+//        if(direction.equals("UP"))
+//            arrowImage = atlas.findRegion("arrow_up");
+//        if(direction.equals("DOWN"))
+          //arrowImage = atlas.findRegion("arrow_down");
+//        if(direction.equals("LEFT"))
+//            arrowImage = atlas.findRegion("arrow_left");
+//        if(direction.equals("RIGHT"))
+//            arrowImage = atlas.findRegion("arrow_right");
+//        if(direction.equals("UPLEFT"))
+//            arrowImage = atlas.findRegion("arrow_up_left");
+//        if(direction.equals("UPRIGHT"))
+//            arrowImage = atlas.findRegion("arrow_up_right");
+//        if(direction.equals("DOWNRIGHT"))
+//            arrowImage = atlas.findRegion("arrow_down_right");
+//        if(direction.equals("DOWNLEFT"))
+//            arrowImage = atlas.findRegion("arrow_down_left");
 
         arrow_dir = direction;
 
@@ -53,36 +71,31 @@ public class Bullet {
     }
 
     public void draw(Batch batch) {
-        batch.draw(arrowImage, arrow.getX(), arrow.getY());
-        float delta = Gdx.graphics.getDeltaTime();
+        batch.draw(arrowImage, bullet.getWorldCenter().x, bullet.getWorldCenter().y);
         if(arrow_dir.equals("UP"))
-            arrow.y += VELOCITY * delta;
+            bullet.setLinearVelocity(0.0f, VELOCITY);
         if(arrow_dir.equals("DOWN"))
-            arrow.y -= VELOCITY *delta;
+            bullet.setLinearVelocity(0.0f, -VELOCITY);
         if(arrow_dir.equals("LEFT"))
-            arrow.x -= VELOCITY * delta;
+            bullet.setLinearVelocity(-VELOCITY, 0.0f);
         if(arrow_dir.equals("RIGHT"))
-            arrow.x += VELOCITY * delta;
+            bullet.setLinearVelocity(VELOCITY, 0.0f);
         if(arrow_dir.equals("UPLEFT")) {
-            arrow.y += VELOCITY  * delta;
-            arrow.x -= VELOCITY  * delta;
+            bullet.setLinearVelocity(-VELOCITY, VELOCITY);
         }
         if(arrow_dir.equals("UPRIGHT")) {
-            arrow.y += VELOCITY * delta;
-            arrow.x += VELOCITY * delta;
+            bullet.setLinearVelocity(VELOCITY, VELOCITY);
         }
         if(arrow_dir.equals("DOWNRIGHT")) {
-            arrow.x += VELOCITY  * delta;
-            arrow.y -= VELOCITY  * delta;
+            bullet.setLinearVelocity(VELOCITY, -VELOCITY);
         }
         if(arrow_dir.equals("DOWNLEFT")) {
-            arrow.x -= VELOCITY  * delta;
-            arrow.y -= VELOCITY  * delta;
+            bullet.setLinearVelocity(-VELOCITY, -VELOCITY);
         }
     }
 
-    public Rectangle getRectangle() {
-        return arrow;
+    public Body getBody() {
+        return bullet;
     }
 
 }

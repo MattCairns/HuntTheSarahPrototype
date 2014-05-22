@@ -51,7 +51,7 @@ public class Enemy {
         ghost.x += (direction.x * VELOCITY) * Gdx.graphics.getDeltaTime();
         ghost.y += (direction.y * VELOCITY) * Gdx.graphics.getDeltaTime();
 
-        enemy.applyLinearImpulse(direction, enemy.getWorldCenter(), true);
+        enemy.applyForce(direction.scl(100,100), enemy.getWorldCenter(), true);
 
     }
 

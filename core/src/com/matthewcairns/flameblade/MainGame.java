@@ -71,7 +71,6 @@ public class MainGame implements Screen {
 
         MapObjects objects = tiledMap.getLayers().get("spawns").getObjects();
         MapObject spawn = objects.get("spawn_point");
-        System.out.println(spawn);
         Rectangle rect = ((RectangleMapObject)spawn).getRectangle();
 
         wallBodies = Utils.wallCollisionShapes(tiledMap, 32.0f, world);
@@ -92,18 +91,18 @@ public class MainGame implements Screen {
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
-//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && time_since_last_fire >= bullet_time) {
-//            bullets.add(new Bullet(player.getRectangle(), player.getFaceState()));
-//            time_since_last_fire = 0.0f;
-//        }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && time_since_last_fire >= bullet_time) {
+            bullets.add(new Bullet(player.getBody(), player.getFaceState(), world));
+            time_since_last_fire = 0.0f;
+        }
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         player.draw(batch);
         enemy.draw(batch);
-        for(Bullet element : bullets) {
-            element.draw(batch);
-        }
+//        for(Bullet element : bullets) {
+//            element.draw(batch);
+//        }
 //        //Create a deep copy of all the bullets then iterate over them.
 //        List<Bullet> copy = new ArrayList<Bullet>(bullets.size());
 //        for(Bullet bullet : bullets) copy.add(bullet);
