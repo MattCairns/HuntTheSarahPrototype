@@ -17,8 +17,10 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,6 +37,8 @@ public class MainGame implements Screen {
 
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
+
+    Array<Body> wallBodies = new Array<Body>();
 
     List<Bullet> bullets = new ArrayList<Bullet>();
     float bullet_time = 0.2f;
@@ -68,7 +72,9 @@ public class MainGame implements Screen {
         System.out.println(spawn);
         Rectangle rect = ((RectangleMapObject)spawn).getRectangle();
 
-        player = new Player(rect.getX(), rect.getY());
+        wallBodies = Utils.wallCollisionShapes(tiledMap, 32.0f, world);
+
+        player = new Player(rect.getX(), rect.getY(), world);
         enemy = new Enemy(300, 230);
     }
 
@@ -79,15 +85,15 @@ public class MainGame implements Screen {
 
         time_since_last_fire += Gdx.graphics.getDeltaTime();
 
-        camera.position.set(player.getRectangle().getX()+16, player.getRectangle().getY() +16, 0);
+        camera.position.set(player.getBody().getPosition().x +16, player.getBody().getPosition().y +16, 0);
         camera.update();
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && time_since_last_fire >= bullet_time) {
-            bullets.add(new Bullet(player.getRectangle(), player.getFaceState()));
-            time_since_last_fire = 0.0f;
-        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && time_since_last_fire >= bullet_time) {
+//            bullets.add(new Bullet(player.getRectangle(), player.getFaceState()));
+//            time_since_last_fire = 0.0f;
+//        }
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -96,25 +102,24 @@ public class MainGame implements Screen {
         for(Bullet element : bullets) {
             element.draw(batch);
         }
-        //Create a deep copy of all the bullets then iterate over them.
-        List<Bullet> copy = new ArrayList<Bullet>(bullets.size());
-        for(Bullet bullet : bullets) copy.add(bullet);
-        for(Bullet bullet : copy) {
-            //If the bullets collides with a wall then explode and remove from list.
-            if(Utils.wallCollision(tiledMap, bullet.getRectangle())) {
-                utils.explode(batch, bullet.getRectangle().getX(), bullet.getRectangle().getY());
-                bullets.remove(bullet);
-            }
-
-        }
+//        //Create a deep copy of all the bullets then iterate over them.
+//        List<Bullet> copy = new ArrayList<Bullet>(bullets.size());
+//        for(Bullet bullet : bullets) copy.add(bullet);
+//        for(Bullet bullet : copy) {
+//            //If the bullets collides with a wall then explode and remove from list.
+//            if(Utils.wallCollision(tiledMap, bullet.getRectangle())) {
+//                utils.explode(batch, bullet.getRectangle().getX(), bullet.getRectangle().getY());
+//                bullets.remove(bullet);
+//            }
+//
+//        }
         batch.end();
 
-
-
-
-
         player.act(Gdx.graphics.getDeltaTime(), tiledMap);
-        enemy.act(tiledMap, player.getRectangle());
+//        enemy.act(tiledMap, player.getRectangle());
+
+
+        world.step(1/60f, 6, 2);
     }
 
     @Override

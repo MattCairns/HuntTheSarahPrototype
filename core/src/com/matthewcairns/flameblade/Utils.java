@@ -10,6 +10,12 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.utils.Array;
+
+import java.awt.*;
 
 /**
  * Created by Matthew Cairns on 17/05/2014.
@@ -19,6 +25,8 @@ public class Utils {
     TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("elf_sprites.txt"));
     Animation explode;
     float stateTime = 0.0f;
+
+    private static float ppt = 0.0f;
 
     public Utils() {
         TextureRegion[] explodeFrames = new TextureRegion[4];
@@ -31,19 +39,42 @@ public class Utils {
 
     //Checks if there has been a collision between the map walls and any object passed to the function.
     //Returns true if there is a collision.
-    public static Boolean wallCollision(TiledMap map, Rectangle objectRec) {
+    public static Array<Body> wallCollisionShapes(TiledMap map, float pixels, World world) {
+        ppt = pixels;
+
+        Array<Body> bodies = new Array<Body>();
 
         for(MapObject object :  map.getLayers().get("Collide").getObjects()) {
-            if(object instanceof RectangleMapObject) {
-                Rectangle rect = ((RectangleMapObject) object).getRectangle();
-                System.out.println(rect.getWidth());
 
-                if (Intersector.overlaps(rect, objectRec)) {
-                   return true;
-                }
-            }
+            Shape shape;
+            FixtureDef fixtureDef = new FixtureDef();
+
+            shape = getRectangle((RectangleMapObject)object);
+
+            BodyDef bd = new BodyDef();
+            bd.type = BodyDef.BodyType.StaticBody;
+            Rectangle rec = ((RectangleMapObject) object).getRectangle();
+            bd.position.set(rec.getX(), rec.getY());
+            fixtureDef.shape = shape;
+
+            Body body = world.createBody(bd);
+            body.createFixture(fixtureDef);
+            bodies.add(body);
+            shape.dispose();
+
         }
-        return false;
+        return bodies;
+    }
+
+    private static PolygonShape getRectangle(RectangleMapObject rectangleObject) {
+        Rectangle rectangle = rectangleObject.getRectangle();
+        PolygonShape polygon = new PolygonShape();
+        Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f) / ppt,
+                                   (rectangle.y + rectangle.height *0.5f) / ppt);
+        polygon.setAsBox(rectangle.width * 0.5f / ppt,
+                         rectangle.height * 0.5f / ppt,
+                         size, 0.0f);
+        return polygon;
     }
 
     //Draws a simple explosion animation at the x and y location specified.

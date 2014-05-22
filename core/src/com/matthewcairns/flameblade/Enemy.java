@@ -31,10 +31,10 @@ public class Enemy {
         ghost.x += (direction.x * VELOCITY) * Gdx.graphics.getDeltaTime();
         ghost.y += (direction.y * VELOCITY) * Gdx.graphics.getDeltaTime();
 
-        if(Utils.wallCollision(map, ghost)) {
-            ghost.x = enemyLoc.x;
-            ghost.y = enemyLoc.y;
-        }
+//        if(Utils.wallCollision(map, ghost)) {
+//            ghost.x = enemyLoc.x;
+//            ghost.y = enemyLoc.y;
+//        }
     }
 
     public void draw(Batch batch) {
