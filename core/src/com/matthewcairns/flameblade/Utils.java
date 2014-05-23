@@ -63,7 +63,6 @@ public class Utils {
             //bd.position.set(rec.getX(), rec.getY());
             fixtureDef.shape = shape;
             fixtureDef.filter.categoryBits = B2DVars.BIT_WALLS;
-            fixtureDef.filter.maskBits = B2DVars.BIT_WALLS | B2DVars.BIT_BULLETS | B2DVars.BIT_PLAYER | B2DVars.BIT_ENEMIES;
 
             Body body = world.createBody(bd);
             body.createFixture(fixtureDef);
