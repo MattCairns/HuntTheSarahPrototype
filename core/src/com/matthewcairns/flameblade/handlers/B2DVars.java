@@ -1,4 +1,4 @@
-package com.matthewcairns.flameblade;
+package com.matthewcairns.flameblade.handlers;
 
 /**
  * Created by Matthew Cairns on 23/05/2014.
