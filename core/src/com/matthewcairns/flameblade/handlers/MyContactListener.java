@@ -1,9 +1,6 @@
 package com.matthewcairns.flameblade.handlers;
 
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.*;
 
 /**
  * Created by Matthew Cairns on 23/05/2014.
@@ -12,7 +9,12 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 public class MyContactListener implements ContactListener {
 
     //Called when two b2d fixtures collide.
-    public void beginContact(Contact c) {}
+    public void beginContact(Contact c) {
+        Fixture fa = c.getFixtureA();
+        Fixture fb = c.getFixtureB();
+
+
+    }
 
     //Called when two fixtures no longer colliding.
     public void endContact(Contact c) {}

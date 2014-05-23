@@ -22,6 +22,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.matthewcairns.flameblade.handlers.MyContactListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -46,7 +47,8 @@ public class MainGame implements Screen {
     float time_since_last_fire = 0.0f;
 
     //Box 2D world for physics simulation
-    World world = new World(new Vector2(0,0), true);
+    World world;
+
     Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     OrthographicCamera b2dCamera;
 
@@ -68,6 +70,9 @@ public class MainGame implements Screen {
         b2dCamera = new OrthographicCamera();
         b2dCamera.setToOrtho(false, Utils.convertToBox(800), Utils.convertToBox(480));
         b2dCamera.update();
+
+        world = new World(new Vector2(0,0), true);
+        world.setContactListener(new MyContactListener());
 
         tiledMap = new TmxMapLoader().load("testmap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);

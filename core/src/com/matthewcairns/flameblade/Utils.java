@@ -63,7 +63,7 @@ public class Utils {
             fixtureDef.filter.categoryBits = B2DVars.BIT_WALLS;
 
             Body body = world.createBody(bd);
-            body.createFixture(fixtureDef);
+            body.createFixture(fixtureDef).setUserData("wall");
             bodies.add(body);
             shape.dispose();
 

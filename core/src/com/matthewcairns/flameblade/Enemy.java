@@ -35,7 +35,7 @@ public class Enemy {
         fixtureDef.filter.maskBits = B2DVars.BIT_WALLS | B2DVars.BIT_BULLETS | B2DVars.BIT_PLAYER;
 
         enemy = world.createBody(bodyDef);
-        enemy.createFixture(fixtureDef);
+        enemy.createFixture(fixtureDef).setUserData("enemy");
         shape.dispose();
 
     }

@@ -70,7 +70,7 @@ public class Player {
         fixtureDef.filter.maskBits = B2DVars.BIT_WALLS | B2DVars.BIT_ENEMIES;
 
         player = world.createBody(bodyDef);
-        player.createFixture(fixtureDef);
+        player.createFixture(fixtureDef).setUserData("player");
         shape.dispose();
 
         //Sprite to display when player is stationary.

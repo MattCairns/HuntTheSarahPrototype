@@ -43,7 +43,7 @@ public class Bullet {
         fixtureDef.filter.maskBits = B2DVars.BIT_WALLS | B2DVars.BIT_BULLETS | B2DVars.BIT_ENEMIES;
 
         bullet = world.createBody(bodyDef);
-        bullet.createFixture(fixtureDef);
+        bullet.createFixture(fixtureDef).setUserData("bullet");
         shape.dispose();
 
 //        if(direction.equals("UP"))
