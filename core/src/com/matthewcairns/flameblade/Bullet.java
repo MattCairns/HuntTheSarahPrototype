@@ -26,21 +26,21 @@ public class Bullet {
     Sound arrowShoot;
 
 
-    float VELOCITY = 5000.0f;
+    float VELOCITY = 100.0f;
     String arrow_dir;
 
     public Bullet(Body player, String direction, World world) {
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(player.getWorldCenter().x, player.getWorldCenter().y);
+        bodyDef.bullet = true;
 
         CircleShape shape = new CircleShape();
-        Vector2 size = new Vector2(16, 16);
-        shape.setRadius(5.0f);
+        shape.setRadius(Utils.convertToBox(5.0f));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 0.0f;
+        fixtureDef.density = 10.0f;
         fixtureDef.friction = 0.8f;
 
         bullet = world.createBody(bodyDef);
@@ -71,26 +71,26 @@ public class Bullet {
     }
 
     public void draw(Batch batch) {
-        batch.draw(arrowImage, bullet.getWorldCenter().x, bullet.getWorldCenter().y);
+       // batch.draw(arrowImage, Utils.convertToWorld(bullet.getWorldCenter().x)+20, Utils.convertToWorld(bullet.getWorldCenter().y)+20);
         if(arrow_dir.equals("UP"))
-            bullet.setLinearVelocity(0.0f, VELOCITY);
+            bullet.applyForceToCenter(0.0f, VELOCITY,true);
         if(arrow_dir.equals("DOWN"))
-            bullet.setLinearVelocity(0.0f, -VELOCITY);
+            bullet.applyForceToCenter(0.0f, -VELOCITY,true);
         if(arrow_dir.equals("LEFT"))
-            bullet.setLinearVelocity(-VELOCITY, 0.0f);
+            bullet.applyForceToCenter(-VELOCITY, 0.0f,true);
         if(arrow_dir.equals("RIGHT"))
-            bullet.setLinearVelocity(VELOCITY, 0.0f);
+            bullet.applyForceToCenter(VELOCITY, 0.0f, true);
         if(arrow_dir.equals("UPLEFT")) {
-            bullet.setLinearVelocity(-VELOCITY, VELOCITY);
+            bullet.applyForceToCenter(-VELOCITY, VELOCITY,true);
         }
         if(arrow_dir.equals("UPRIGHT")) {
-            bullet.setLinearVelocity(VELOCITY, VELOCITY);
+            bullet.applyForceToCenter(VELOCITY, VELOCITY,true);
         }
         if(arrow_dir.equals("DOWNRIGHT")) {
-            bullet.setLinearVelocity(VELOCITY, -VELOCITY);
+            bullet.applyForceToCenter(VELOCITY, -VELOCITY,true);
         }
         if(arrow_dir.equals("DOWNLEFT")) {
-            bullet.setLinearVelocity(-VELOCITY, -VELOCITY);
+            bullet.applyForceToCenter(-VELOCITY, -VELOCITY,true);
         }
     }
 

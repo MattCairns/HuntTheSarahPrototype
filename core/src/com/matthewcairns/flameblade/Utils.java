@@ -26,7 +26,15 @@ public class Utils {
     Animation explode;
     float stateTime = 0.0f;
 
-    private static float ppt = 0.0f;
+    static float WORLD_TO_BOX = 0.03125f;
+    static float BOX_TO_WORLD = 32.0f;
+
+    public static float convertToBox(float x) {
+        return x / BOX_TO_WORLD;
+    }
+    public static float convertToWorld(float x) {
+        return x * BOX_TO_WORLD;
+    }
 
     public Utils() {
         TextureRegion[] explodeFrames = new TextureRegion[4];
@@ -39,9 +47,7 @@ public class Utils {
 
     //Checks if there has been a collision between the map walls and any object passed to the function.
     //Returns true if there is a collision.
-    public static Array<Body> wallCollisionShapes(TiledMap map, float pixels, World world) {
-        ppt = pixels;
-
+    public static Array<Body> wallCollisionShapes(TiledMap map, World world) {
         Array<Body> bodies = new Array<Body>();
 
         for(MapObject object :  map.getLayers().get("Collide").getObjects()) {
@@ -69,10 +75,10 @@ public class Utils {
     private static PolygonShape getRectangle(RectangleMapObject rectangleObject) {
         Rectangle rectangle = rectangleObject.getRectangle();
         PolygonShape polygon = new PolygonShape();
-        Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f),
-                                   (rectangle.y + rectangle.height *0.5f));
-        polygon.setAsBox(rectangle.width * 0.5f,
-                         rectangle.height * 0.5f,
+        Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f) * WORLD_TO_BOX ,
+                                   (rectangle.y + rectangle.height *0.5f) * WORLD_TO_BOX);
+        polygon.setAsBox(rectangle.width * 0.5f * WORLD_TO_BOX,
+                         rectangle.height * 0.5f * WORLD_TO_BOX,
                          size, 0.0f);
         return polygon;
     }

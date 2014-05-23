@@ -48,8 +48,8 @@ public class MainGame implements Screen {
     //Box 2D world for physics simulation
     World world = new World(new Vector2(0,0), true);
     Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
-    static final float WORLD_TO_BOX = 0.01f;
-    static final float BOX_TO_WORLD = 100.0f;
+    OrthographicCamera b2dCamera;
+
 
     Player player;
     Enemy enemy;
@@ -65,6 +65,10 @@ public class MainGame implements Screen {
         camera.setToOrtho(false, 800, 480);
         camera.update();
 
+        b2dCamera = new OrthographicCamera();
+        b2dCamera.setToOrtho(false, Utils.convertToBox(800), Utils.convertToBox(480));
+        b2dCamera.update();
+
         tiledMap = new TmxMapLoader().load("testmap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
@@ -73,7 +77,7 @@ public class MainGame implements Screen {
         MapObject spawn = objects.get("spawn_point");
         Rectangle rect = ((RectangleMapObject)spawn).getRectangle();
 
-        wallBodies = Utils.wallCollisionShapes(tiledMap, 32.0f, world);
+        wallBodies = Utils.wallCollisionShapes(tiledMap, world);
 
         player = new Player(rect.getX(), rect.getY(), world);
         enemy = new Enemy(300, 230, world);
@@ -86,8 +90,13 @@ public class MainGame implements Screen {
 
         time_since_last_fire += Gdx.graphics.getDeltaTime();
 
-        camera.position.set(player.getBody().getPosition().x +16, player.getBody().getPosition().y +16, 0);
+        camera.position.set(Utils.convertToWorld(player.getBody().getWorldCenter().x),
+                            Utils.convertToWorld(player.getBody().getWorldCenter().y), 0);
         camera.update();
+
+        b2dCamera.position.set(player.getBody().getWorldCenter().x,
+                               player.getBody().getWorldCenter().y, 0);
+        b2dCamera.update();
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
@@ -100,9 +109,9 @@ public class MainGame implements Screen {
         batch.begin();
         player.draw(batch);
         enemy.draw(batch);
-//        for(Bullet element : bullets) {
-//            element.draw(batch);
-//        }
+        for(Bullet element : bullets) {
+            element.draw(batch);
+        }
 //        //Create a deep copy of all the bullets then iterate over them.
 //        List<Bullet> copy = new ArrayList<Bullet>(bullets.size());
 //        for(Bullet bullet : bullets) copy.add(bullet);
@@ -116,10 +125,10 @@ public class MainGame implements Screen {
 //        }
         batch.end();
 
-        player.act(Gdx.graphics.getDeltaTime(), tiledMap);
+        player.act();
         enemy.act(tiledMap, player.getBody());
 
-        debugRenderer.render(world, camera.combined);
+        debugRenderer.render(world, b2dCamera.combined);
         world.step(1/60f, 6, 2);
 
     }
