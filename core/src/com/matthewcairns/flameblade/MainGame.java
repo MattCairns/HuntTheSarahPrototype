@@ -13,12 +13,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.matthewcairns.flameblade.handlers.Explosions;
 import com.matthewcairns.flameblade.handlers.MyContactListener;
 import com.matthewcairns.flameblade.handlers.Utils;
 
@@ -42,6 +44,8 @@ public class MainGame implements Screen {
     List<Bullet> bullets = new ArrayList<Bullet>();
     float bullet_time = 0.2f;
     float time_since_last_fire = 0.0f;
+
+    Array<Explosions> explosions = new Array<Explosions>();
 
     //Box 2D world for physics simulation
     World world;
@@ -97,6 +101,7 @@ public class MainGame implements Screen {
                     bullets.remove(bullet);
                 }
             }
+            explosions.add(new Explosions(Utils.convertToWorld(bodies.get(i).getWorldCenter().x)-16, Utils.convertToWorld(bodies.get(i).getWorldCenter().y)-16, batch));
             world.destroyBody(bodies.get(i));
             bodies.get(i).setUserData(null);
         }
@@ -135,6 +140,15 @@ public class MainGame implements Screen {
         enemy.draw(batch);
         for(Bullet element : bullets) {
             element.draw(batch);
+        }
+
+        Array<Explosions> copy = new Array<Explosions>();
+        for(Explosions e : explosions) copy.add(e);
+        for(Explosions e : copy) {
+            e.smallExplosion();
+            if(e.getFlaggedForRemoval()) {
+                explosions.removeValue(e, true);
+            }
         }
 
         batch.end();
