@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.*;
 import com.matthewcairns.flameblade.handlers.B2DVars;
+import com.matthewcairns.flameblade.handlers.Utils;
 
 /**
  * Created by Matthew Cairns on 16/05/2014.

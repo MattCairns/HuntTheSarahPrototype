@@ -1,4 +1,4 @@
-package com.matthewcairns.flameblade;
+package com.matthewcairns.flameblade.handlers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.utils.Array;
-import com.matthewcairns.flameblade.handlers.B2DVars;
 
 /**
  * Created by Matthew Cairns on 17/05/2014.
@@ -27,11 +26,11 @@ public class Utils {
     static float WORLD_TO_BOX = 0.03125f;
     static float BOX_TO_WORLD = 32.0f;
 
-    public static float convertToBox(float x) {
-        return x / BOX_TO_WORLD;
+    public static float convertToBox(float value) {
+        return value / BOX_TO_WORLD;
     }
-    public static float convertToWorld(float x) {
-        return x * BOX_TO_WORLD;
+    public static float convertToWorld(float value) {
+        return value * BOX_TO_WORLD;
     }
 
     public Utils() {
@@ -57,8 +56,6 @@ public class Utils {
 
             BodyDef bd = new BodyDef();
             bd.type = BodyDef.BodyType.StaticBody;
-            Rectangle rec = ((RectangleMapObject) object).getRectangle();
-            //bd.position.set(rec.getX(), rec.getY());
             fixtureDef.shape = shape;
             fixtureDef.filter.categoryBits = B2DVars.BIT_WALLS;
 

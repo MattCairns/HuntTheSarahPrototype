@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -16,16 +15,14 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.matthewcairns.flameblade.handlers.MyContactListener;
+import com.matthewcairns.flameblade.handlers.Utils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -90,6 +87,24 @@ public class MainGame implements Screen {
         enemy = new Enemy(300, 230, world);
     }
 
+    private void removeBodiesToDelete() {
+        Array<Body> bodies = cl.getBodies();
+        for(int i = 0; i < bodies.size; i++) {
+            //Create a deep copy of all the bullets then iterate over them.
+            List<Bullet> copy = new ArrayList<Bullet>(bullets.size());
+            for(Bullet bullet : bullets) copy.add(bullet);
+            for(Bullet bullet : copy) {
+                //If the bullets collides with a wall then explode and remove from list.
+                if(bullet.getBody() == bodies.get(i)) {
+                    bullets.remove(bullet);
+                }
+            }
+            world.destroyBody(bodies.get(i));
+            bodies.get(i).setUserData(null);
+        }
+        bodies.clear();
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
@@ -132,23 +147,8 @@ public class MainGame implements Screen {
         debugRenderer.render(world, b2dCamera.combined);
         world.step(1/60f, 6, 2);
 
-        Array<Body> bodies = cl.getBodies();
-        for(int i = 0; i < bodies.size; i++) {
-            //Create a deep copy of all the bullets then iterate over them.
-            List<Bullet> copy = new ArrayList<Bullet>(bullets.size());
-            for(Bullet bullet : bullets) copy.add(bullet);
-            for(Bullet bullet : copy) {
-                //If the bullets collides with a wall then explode and remove from list.
-                if(bullet.getBody() == bodies.get(i)) {
-                    bullets.remove(bullet);
-                }
+        removeBodiesToDelete();
 
-            }
-            world.destroyBody(bodies.get(i));
-            bodies.get(i).setUserData(null);
-
-        }
-        bodies.clear();
     }
 
     @Override
