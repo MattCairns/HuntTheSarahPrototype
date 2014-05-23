@@ -19,9 +19,7 @@ import com.badlogic.gdx.utils.Array;
  * All rights reserved.
  */
 public class Utils {
-    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("elf_sprites.txt"));
-    Animation explode;
-    float stateTime = 0.0f;
+
 
     static float WORLD_TO_BOX = 0.03125f;
     static float BOX_TO_WORLD = 32.0f;
@@ -33,14 +31,6 @@ public class Utils {
         return value * BOX_TO_WORLD;
     }
 
-    public Utils() {
-        TextureRegion[] explodeFrames = new TextureRegion[4];
-        explodeFrames[0] = atlas.findRegion("small_explosion_one");
-        explodeFrames[1] = atlas.findRegion("small_explosion_two");
-        explodeFrames[2] = atlas.findRegion("small_explosion_three");
-        explodeFrames[3] = atlas.findRegion("small_explosion_four");
-        explode = new Animation(0.2f, explodeFrames);
-    }
 
     //Checks if there has been a collision between the map walls and any object passed to the function.
     //Returns true if there is a collision.
@@ -77,13 +67,6 @@ public class Utils {
                          rectangle.height * 0.5f * WORLD_TO_BOX,
                          size, 0.0f);
         return polygon;
-    }
-
-    //Draws a simple explosion animation at the x and y location specified.
-    public void explode(Batch batch, float x, float y) {
-        stateTime += Gdx.graphics.getDeltaTime();
-        System.out.println(stateTime);
-        batch.draw(explode.getKeyFrame(stateTime, true), x, y);
     }
 
 
