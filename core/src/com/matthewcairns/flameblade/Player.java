@@ -35,7 +35,7 @@ public class Player {
     Animation elfWalkDownLeft;
     Animation elfWalkDownRight;
 
-    private Sound walkingSound;
+    Sound walkingSound;
     private float timeSinceLastStep = 0.0f;
 
     float oldX;
@@ -46,11 +46,11 @@ public class Player {
     float stateTime = 0.0f;
 
     public enum State {
-        IDLE, WALKING, DYING, SHOOTING;
+        IDLE, WALKING, DYING, SHOOTING
     }
     public enum FaceState {
         LEFT, RIGHT, UP, DOWN,
-        UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT;
+        UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT
     }
     State state = State.IDLE;
     FaceState faceState = FaceState.RIGHT;

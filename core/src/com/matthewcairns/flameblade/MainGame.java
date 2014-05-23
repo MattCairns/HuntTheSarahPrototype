@@ -54,8 +54,6 @@ public class MainGame implements Screen {
     Player player;
     Enemy enemy;
 
-    Utils utils = new Utils();
-
     public MainGame(final Flameblade gam) {
         game = gam;
 
@@ -142,7 +140,7 @@ public class MainGame implements Screen {
         batch.end();
 
         player.act();
-        enemy.act(tiledMap, player.getBody());
+        enemy.act(player.getBody());
 
         debugRenderer.render(world, b2dCamera.combined);
         world.step(1/60f, 6, 2);

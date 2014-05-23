@@ -3,7 +3,6 @@ package com.matthewcairns.flameblade;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.matthewcairns.flameblade.handlers.B2DVars;
@@ -17,8 +16,6 @@ public class Enemy {
     Texture ghostImage = new Texture(Gdx.files.internal("ghost.png"));
     BodyDef bodyDef;
     Body enemy;
-
-    float VELOCITY = 150.0f;
 
     public Enemy(float x, float y, World world) {
         bodyDef = new BodyDef();
@@ -41,7 +38,7 @@ public class Enemy {
 
     }
 
-    public void act(TiledMap map, Body player) {
+    public void act(Body player) {
 
         Vector2 playerLoc = new Vector2(player.getWorldCenter());
         Vector2 enemyLoc = new Vector2(enemy.getWorldCenter());

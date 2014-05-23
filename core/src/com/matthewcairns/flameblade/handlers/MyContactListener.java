@@ -15,18 +15,17 @@ public class MyContactListener implements ContactListener {
         Fixture fa = c.getFixtureA();
         Fixture fb = c.getFixtureB();
 
+        //If bullet hits a wall then add the body to the destroy list.
         if(fa.getUserData() != null && fa.getUserData().equals("wall")) {
             if(fb.getUserData() != null && fb.getUserData().equals("bullet")) {
                 if(!bodiesToDestroy.contains(fb.getBody(), true))
                     bodiesToDestroy.add(fb.getBody());
-                System.out.println("Destroying bullet");
             }
         }
         else if(fb.getUserData() != null && fb.getUserData().equals("wall")) {
             if(fa.getUserData() != null && fa.getUserData().equals("bullet")) {
                 if(!bodiesToDestroy.contains(fa.getBody(), true))
                     bodiesToDestroy.add(fa.getBody());
-                System.out.println("Destroying bullet");
             }
         }
 
