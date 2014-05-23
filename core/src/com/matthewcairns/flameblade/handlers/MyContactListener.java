@@ -28,8 +28,6 @@ public class MyContactListener implements ContactListener {
                     bodiesToDestroy.add(fa.getBody());
             }
         }
-
-
     }
 
     //Called when two fixtures no longer colliding.
