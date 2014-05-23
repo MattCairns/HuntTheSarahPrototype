@@ -48,6 +48,7 @@ public class MainGame implements Screen {
 
     //Box 2D world for physics simulation
     World world;
+    MyContactListener cl;
 
     Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     OrthographicCamera b2dCamera;
@@ -72,7 +73,8 @@ public class MainGame implements Screen {
         b2dCamera.update();
 
         world = new World(new Vector2(0,0), true);
-        world.setContactListener(new MyContactListener());
+        cl = new MyContactListener();
+        world.setContactListener(cl);
 
         tiledMap = new TmxMapLoader().load("testmap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
@@ -93,12 +95,16 @@ public class MainGame implements Screen {
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
+
         time_since_last_fire += Gdx.graphics.getDeltaTime();
 
+        //Update the camera for libgdx
         camera.position.set(Utils.convertToWorld(player.getBody().getWorldCenter().x),
                             Utils.convertToWorld(player.getBody().getWorldCenter().y), 0);
         camera.update();
 
+        //Update the camera for box2d
         b2dCamera.position.set(player.getBody().getWorldCenter().x,
                                player.getBody().getWorldCenter().y, 0);
         b2dCamera.update();
@@ -117,17 +123,7 @@ public class MainGame implements Screen {
         for(Bullet element : bullets) {
             element.draw(batch);
         }
-//        //Create a deep copy of all the bullets then iterate over them.
-//        List<Bullet> copy = new ArrayList<Bullet>(bullets.size());
-//        for(Bullet bullet : bullets) copy.add(bullet);
-//        for(Bullet bullet : copy) {
-//            //If the bullets collides with a wall then explode and remove from list.
-//            if(Utils.wallCollision(tiledMap, bullet.getRectangle())) {
-//                utils.explode(batch, bullet.getRectangle().getX(), bullet.getRectangle().getY());
-//                bullets.remove(bullet);
-//            }
-//
-//        }
+
         batch.end();
 
         player.act();
@@ -136,6 +132,23 @@ public class MainGame implements Screen {
         debugRenderer.render(world, b2dCamera.combined);
         world.step(1/60f, 6, 2);
 
+        Array<Body> bodies = cl.getBodies();
+        for(int i = 0; i < bodies.size; i++) {
+            //Create a deep copy of all the bullets then iterate over them.
+            List<Bullet> copy = new ArrayList<Bullet>(bullets.size());
+            for(Bullet bullet : bullets) copy.add(bullet);
+            for(Bullet bullet : copy) {
+                //If the bullets collides with a wall then explode and remove from list.
+                if(bullet.getBody() == bodies.get(i)) {
+                    bullets.remove(bullet);
+                }
+
+            }
+            world.destroyBody(bodies.get(i));
+            bodies.get(i).setUserData(null);
+
+        }
+        bodies.clear();
     }
 
     @Override

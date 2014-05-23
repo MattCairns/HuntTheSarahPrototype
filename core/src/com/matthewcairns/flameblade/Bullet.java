@@ -23,7 +23,7 @@ public class Bullet {
     Sound arrowShoot;
 
 
-    float VELOCITY = 100.0f;
+    float VELOCITY = 20.0f;
     String arrow_dir;
 
     public Bullet(Body player, String direction, World world) {
@@ -44,6 +44,7 @@ public class Bullet {
 
         bullet = world.createBody(bodyDef);
         bullet.createFixture(fixtureDef).setUserData("bullet");
+
         shape.dispose();
 
 //        if(direction.equals("UP"))
