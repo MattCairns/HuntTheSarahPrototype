@@ -72,6 +72,8 @@ public class Player {
         fixtureDef.shape = shape;
         fixtureDef.density = 0.0f;
         fixtureDef.friction = 0.8f;
+        fixtureDef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fixtureDef.filter.maskBits = B2DVars.BIT_WALLS | B2DVars.BIT_ENEMIES;
 
         player = world.createBody(bodyDef);
         player.createFixture(fixtureDef);

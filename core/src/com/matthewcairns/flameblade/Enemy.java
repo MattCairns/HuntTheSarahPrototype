@@ -31,6 +31,8 @@ public class Enemy {
         fixtureDef.shape = shape;
         fixtureDef.density = 5f;
         fixtureDef.friction = 0.8f;
+        fixtureDef.filter.categoryBits = B2DVars.BIT_ENEMIES;
+        fixtureDef.filter.maskBits = B2DVars.BIT_WALLS | B2DVars.BIT_BULLETS | B2DVars.BIT_PLAYER;
 
         enemy = world.createBody(bodyDef);
         enemy.createFixture(fixtureDef);

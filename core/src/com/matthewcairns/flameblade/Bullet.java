@@ -42,6 +42,8 @@ public class Bullet {
         fixtureDef.shape = shape;
         fixtureDef.density = 10.0f;
         fixtureDef.friction = 0.8f;
+        fixtureDef.filter.categoryBits = B2DVars.BIT_BULLETS;
+        fixtureDef.filter.maskBits = B2DVars.BIT_WALLS | B2DVars.BIT_BULLETS | B2DVars.BIT_ENEMIES;
 
         bullet = world.createBody(bodyDef);
         bullet.createFixture(fixtureDef);
