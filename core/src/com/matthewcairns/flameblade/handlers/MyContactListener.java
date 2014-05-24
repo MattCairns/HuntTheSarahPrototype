@@ -36,8 +36,6 @@ public class MyContactListener implements ContactListener {
                     bodiesToDestroy.add(fb.getBody());
                 if(!bodiesToDestroy.contains(fa.getBody(), true))
                     bodiesToDestroy.add(fa.getBody());
-
-                System.out.println("ab");
             }
         }
         else if(fb.getUserData() != null && fb.getUserData().equals("bullet")) {
@@ -46,7 +44,6 @@ public class MyContactListener implements ContactListener {
                     bodiesToDestroy.add(fb.getBody());
                 if(!bodiesToDestroy.contains(fa.getBody(), true))
                     bodiesToDestroy.add(fa.getBody());
-                System.out.println("ba");
             }
         }
     }

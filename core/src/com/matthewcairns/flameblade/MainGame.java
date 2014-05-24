@@ -84,11 +84,14 @@ public class MainGame implements Screen {
         MapObjects objects = tiledMap.getLayers().get("spawns").getObjects();
         MapObject spawn = objects.get("spawn_point");
         Rectangle rect = ((RectangleMapObject)spawn).getRectangle();
+        player = new Player(rect.getX(), rect.getY(), world);
 
         wallBodies = Utils.wallCollisionShapes(tiledMap, world);
 
-        player = new Player(rect.getX(), rect.getY(), world);
-        ec = new EnemyController(new Vector2(300, 230), world, batch, 0.5f);
+        MapObject enemy_spawn = objects.get("enemy_spawn_point");
+        Rectangle enemy_spawn_rect = ((RectangleMapObject)enemy_spawn).getRectangle();
+        System.out.println(enemy_spawn_rect.getX());
+        ec = new EnemyController(new Vector2(enemy_spawn_rect.getX(), enemy_spawn_rect.getY()), world, batch, 0.5f);
     }
 
     private void removeBodiesToDelete() {
