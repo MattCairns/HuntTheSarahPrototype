@@ -96,12 +96,15 @@ public class MainGame implements Screen {
             List<Bullet> copy = new ArrayList<Bullet>(bullets.size());
             for(Bullet bullet : bullets) copy.add(bullet);
             for(Bullet bullet : copy) {
-                //If the bullets collides with a wall then explode and remove from list.
+                //If the bullets collides with a wall then add to explosion list and remove from bullet list
                 if(bullet.getBody() == bodies.get(i)) {
                     bullets.remove(bullet);
+                    explosions.add(new Explosions(Utils.convertToWorld(bodies.get(i).getWorldCenter().x)-16,
+                            Utils.convertToWorld(bodies.get(i).getWorldCenter().y)-16,
+                            batch, 0));
                 }
             }
-            explosions.add(new Explosions(Utils.convertToWorld(bodies.get(i).getWorldCenter().x)-16, Utils.convertToWorld(bodies.get(i).getWorldCenter().y)-16, batch));
+
             world.destroyBody(bodies.get(i));
             bodies.get(i).setUserData(null);
         }
@@ -145,7 +148,7 @@ public class MainGame implements Screen {
         Array<Explosions> copy = new Array<Explosions>();
         for(Explosions e : explosions) copy.add(e);
         for(Explosions e : copy) {
-            e.smallExplosion();
+            e.explode();
             if(e.getFlaggedForRemoval()) {
                 explosions.removeValue(e, true);
             }
