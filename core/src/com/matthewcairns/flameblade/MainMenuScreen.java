@@ -2,6 +2,7 @@ package com.matthewcairns.flameblade;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -30,6 +31,8 @@ public class MainMenuScreen implements Screen {
     TextButton.TextButtonStyle style;
 
     OrthographicCamera camera;
+
+    Music music;
 
     public MainMenuScreen(final Flameblade gam) {
 
@@ -61,11 +64,16 @@ public class MainMenuScreen implements Screen {
             }
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 gam.setScreen(new MainGame(game));
+                music.stop();
             }
         });
 
         stage.addActor(titleButton);
         stage.addActor(playButton);
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/thesagabegins.mp3"));
+        music.setVolume(0.5f);
+        music.play();
 
     }
 
@@ -91,5 +99,6 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        music.dispose();
     }
 }

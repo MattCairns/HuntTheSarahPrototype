@@ -19,7 +19,7 @@ public class Bullet {
     Body bullet;
 
     //TextureRegion arrowImage;
-    Texture arrowImage = new Texture(Gdx.files.internal("arrow_b2d.png"));
+    //Texture arrowImage = new Texture(Gdx.files.internal("arrow_b2d.png"));
 
     Sound arrowShoot;
 

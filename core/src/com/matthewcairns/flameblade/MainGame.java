@@ -3,6 +3,7 @@ package com.matthewcairns.flameblade;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -55,6 +56,7 @@ public class MainGame implements Screen {
     Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     OrthographicCamera b2dCamera;
 
+    Music music;
 
     Player player;
     Enemy enemy;
@@ -92,6 +94,9 @@ public class MainGame implements Screen {
         Rectangle enemy_spawn_rect = ((RectangleMapObject)enemy_spawn).getRectangle();
         System.out.println(enemy_spawn_rect.getX());
         ec = new EnemyController(new Vector2(enemy_spawn_rect.getX(), enemy_spawn_rect.getY()), world, batch, 0.5f);
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/swashingthebuck.mp3"));
+        music.play();
     }
 
     private void removeBodiesToDelete() {
