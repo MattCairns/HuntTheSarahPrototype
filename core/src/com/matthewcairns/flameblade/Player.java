@@ -36,6 +36,7 @@ public class Player {
     Animation elfWalkDownRight;
 
     Sound walkingSound;
+    Sound hurtSound;
     private float timeSinceLastStep = 0.0f;
 
     float oldX;
@@ -44,6 +45,8 @@ public class Player {
     float SPEED = 500.0f;
     float WALK_SPEED = 0.2f;
     float stateTime = 0.0f;
+
+    float playerHealth = 100.0f;
 
     public enum State {
         IDLE, WALKING, DYING
@@ -109,6 +112,7 @@ public class Player {
         elfWalkDownRight = Utils.createAnimation(atlas, new String[]{"elf_walk_down_right_one", "elf_walk_down_right_two"}, WALK_SPEED);
 
         walkingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/footstep06.ogg"));
+        hurtSound = Gdx.audio.newSound(Gdx.files.internal("sounds/player_hurt.mp3"));
     }
 
 
@@ -263,5 +267,16 @@ public class Player {
         }
         return null;
     }
+
+    public float getPlayerHealth() {
+        return playerHealth;
+    }
+
+    public void setPlayerHealth(float playerHealth) {
+        this.playerHealth = playerHealth;
+        System.out.println(playerHealth);
+        hurtSound.play();
+    }
+
 
 }

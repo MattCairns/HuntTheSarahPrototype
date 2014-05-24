@@ -87,6 +87,7 @@ public class MainGame implements Screen {
         MapObject spawn = objects.get("spawn_point");
         Rectangle rect = ((RectangleMapObject)spawn).getRectangle();
         player = new Player(rect.getX(), rect.getY(), world);
+        cl.getPlayer(player);
 
         wallBodies = Utils.wallCollisionShapes(tiledMap, world);
 
@@ -95,7 +96,7 @@ public class MainGame implements Screen {
         System.out.println(enemy_spawn_rect.getX());
         ec = new EnemyController(new Vector2(enemy_spawn_rect.getX(), enemy_spawn_rect.getY()), world, batch, 0.5f);
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("music/swashingthebuck.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/swashingthebuck.ogg"));
         music.play();
     }
 
@@ -126,7 +127,7 @@ public class MainGame implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
 
@@ -176,6 +177,10 @@ public class MainGame implements Screen {
         world.step(1/60f, 6, 2);
 
         removeBodiesToDelete();
+
+        if(player.getPlayerHealth() == 0.0f) {
+            pause();
+        }
 
     }
 

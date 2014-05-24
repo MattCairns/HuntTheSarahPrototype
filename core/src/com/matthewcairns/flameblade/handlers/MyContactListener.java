@@ -2,6 +2,7 @@ package com.matthewcairns.flameblade.handlers;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.matthewcairns.flameblade.Player;
 
 /**
  * Created by Matthew Cairns on 23/05/2014.
@@ -9,6 +10,11 @@ import com.badlogic.gdx.utils.Array;
  */
 public class MyContactListener implements ContactListener {
     Array<Body> bodiesToDestroy = new Array<Body>();
+    Player player;
+
+    public void getPlayer(Player player) {
+        this.player = player;
+    }
 
     //Called when two b2d fixtures collide.
     public void beginContact(Contact c) {
@@ -44,6 +50,25 @@ public class MyContactListener implements ContactListener {
                     bodiesToDestroy.add(fb.getBody());
                 if(!bodiesToDestroy.contains(fa.getBody(), true))
                     bodiesToDestroy.add(fa.getBody());
+            }
+        }
+
+        //If an enemy hits the player reduce player HP
+        if(fa.getUserData() != null && fa.getUserData().equals("player")) {
+            if(fb.getUserData() != null && fb.getUserData().equals("enemy")) {
+                if(!bodiesToDestroy.contains(fb.getBody(), true))
+                    bodiesToDestroy.add(fb.getBody());
+
+                player.setPlayerHealth(player.getPlayerHealth()-5.0f);
+
+
+            }
+        }
+        else if(fb.getUserData() != null && fb.getUserData().equals("player")) {
+            if(fa.getUserData() != null && fa.getUserData().equals("enemy")) {
+                if(!bodiesToDestroy.contains(fa.getBody(), true))
+                    bodiesToDestroy.add(fa.getBody());
+                player.setPlayerHealth(player.getPlayerHealth()-5.0f);
             }
         }
     }

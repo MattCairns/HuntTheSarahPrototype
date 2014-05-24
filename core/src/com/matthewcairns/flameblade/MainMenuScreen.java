@@ -71,7 +71,7 @@ public class MainMenuScreen implements Screen {
         stage.addActor(titleButton);
         stage.addActor(playButton);
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("music/thesagabegins.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/thesagabegins.ogg"));
         music.setVolume(0.5f);
         music.play();
 
