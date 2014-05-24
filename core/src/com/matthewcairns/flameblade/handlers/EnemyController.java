@@ -6,12 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.matthewcairns.flameblade.Bullet;
 import com.matthewcairns.flameblade.Enemy;
 import com.matthewcairns.flameblade.Player;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Matthew Cairns on 24/05/2014.
@@ -21,19 +18,21 @@ public class EnemyController {
     World world;
     Array<Enemy> enemies;
     float timeSinceLastSpawn;
+    float spawnRate;
     Vector2 spawnLocation;
     Batch batch;
 
-    public EnemyController(Vector2 sl, World w, Batch b) {
+    public EnemyController(Vector2 sl, World w, Batch b, float sr) {
         enemies = new Array<Enemy>();
         timeSinceLastSpawn = 0.0f;
         spawnLocation = sl;
         world = w;
         batch = b;
+        spawnRate = sr;
     }
 
     public void createNewEnemy() {
-        if(timeSinceLastSpawn > 1.0f) {
+        if(timeSinceLastSpawn > spawnRate) {
             enemies.add(new Enemy(spawnLocation.x, spawnLocation.y, world));
             timeSinceLastSpawn = 0.0f;
         }

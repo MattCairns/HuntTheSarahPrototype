@@ -88,7 +88,7 @@ public class MainGame implements Screen {
         wallBodies = Utils.wallCollisionShapes(tiledMap, world);
 
         player = new Player(rect.getX(), rect.getY(), world);
-        ec = new EnemyController(new Vector2(300, 230), world, batch);
+        ec = new EnemyController(new Vector2(300, 230), world, batch, 0.5f);
     }
 
     private void removeBodiesToDelete() {

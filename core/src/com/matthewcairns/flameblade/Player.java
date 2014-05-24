@@ -46,7 +46,7 @@ public class Player {
     float stateTime = 0.0f;
 
     public enum State {
-        IDLE, WALKING, DYING, SHOOTING
+        IDLE, WALKING, DYING
     }
     public enum FaceState {
         LEFT, RIGHT, UP, DOWN,
@@ -172,56 +172,66 @@ public class Player {
 
     public void draw(Batch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
-        if(state == State.IDLE && faceState == FaceState.LEFT) {
-            batch.draw(elfIdleLeft, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+
+        switch(state) {
+            case IDLE:
+                switch(faceState) {
+                    case LEFT:
+                        batch.draw(elfIdleLeft, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case RIGHT:
+                        batch.draw(elfIdleRight, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case UP:
+                        batch.draw(elfIdleUp, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case DOWN:
+                        batch.draw(elfIdleDown, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case UPLEFT:
+                        batch.draw(elfIdleUpLeft, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case UPRIGHT:
+                        batch.draw(elfIdleUpRight, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case DOWNRIGHT:
+                        batch.draw(elfIdleDownRight, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case DOWNLEFT:
+                        batch.draw(elfIdleDownLeft, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                }
+                break;
+
+            case WALKING:
+                switch(faceState) {
+                    case LEFT:
+                        batch.draw(elfWalkLeft.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case RIGHT:
+                        batch.draw(elfWalkRight.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case UP:
+                        batch.draw(elfWalkUp.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case DOWN:
+                        batch.draw(elfWalkDown.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case UPLEFT:
+                        batch.draw(elfWalkUpLeft.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case UPRIGHT:
+                        batch.draw(elfWalkUpRight.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case DOWNRIGHT:
+                        batch.draw(elfWalkDownRight.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                    case DOWNLEFT:
+                        batch.draw(elfWalkDownLeft.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        break;
+                }
+                break;
         }
-        if(state == State.IDLE && faceState == FaceState.RIGHT) {
-            batch.draw(elfIdleRight, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-        }
-        if(state == State.IDLE && faceState == FaceState.UP) {
-            batch.draw(elfIdleUp, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-        }
-        if(state == State.IDLE && faceState == FaceState.DOWN) {
-            batch.draw(elfIdleDown, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-        }
-        if(state == State.IDLE && faceState == FaceState.UPLEFT) {
-            batch.draw(elfIdleUpLeft, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-        }
-        if(state == State.IDLE && faceState == FaceState.UPRIGHT) {
-            batch.draw(elfIdleUpRight, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-        }
-        if(state == State.IDLE && faceState == FaceState.DOWNRIGHT) {
-            batch.draw(elfIdleDownRight, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-    }
-        if(state == State.IDLE && faceState == FaceState.DOWNLEFT) {
-            batch.draw(elfIdleDownLeft, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-        }
-
-        if(state == State.WALKING && faceState == FaceState.LEFT)
-            batch.draw(elfWalkLeft.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-
-        if(state == State.WALKING && faceState == FaceState.RIGHT)
-            batch.draw(elfWalkRight.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-
-        if(state == State.WALKING && faceState == FaceState.UP)
-            batch.draw(elfWalkUp.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-
-        if(state == State.WALKING && faceState == FaceState.DOWN)
-            batch.draw(elfWalkDown.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-
-        if(state == State.WALKING && faceState == FaceState.UPLEFT)
-            batch.draw(elfWalkUpLeft.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-
-        if(state == State.WALKING && faceState == FaceState.UPRIGHT)
-            batch.draw(elfWalkUpRight.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-
-        if(state == State.WALKING && faceState == FaceState.DOWNRIGHT)
-            batch.draw(elfWalkDownRight.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-
-        if(state == State.WALKING && faceState == FaceState.DOWNLEFT)
-            batch.draw(elfWalkDownLeft.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
-
-
 
     }
 

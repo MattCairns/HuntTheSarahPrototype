@@ -67,7 +67,7 @@ public class Bullet {
 
         arrow_dir = direction;
 
-        arrowShoot = Gdx.audio.newSound(Gdx.files.internal("sounds/arrow_shoot.mp3"));
+        arrowShoot = Gdx.audio.newSound(Gdx.files.internal("sounds/fireelf.ogg"));
         arrowShoot.play();
     }
 
