@@ -20,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.matthewcairns.flameblade.handlers.EnemyController;
 import com.matthewcairns.flameblade.handlers.Explosions;
 import com.matthewcairns.flameblade.handlers.MyContactListener;
 import com.matthewcairns.flameblade.handlers.Utils;
@@ -57,6 +58,7 @@ public class MainGame implements Screen {
 
     Player player;
     Enemy enemy;
+    EnemyController ec;
 
     public MainGame(final Flameblade gam) {
         game = gam;
@@ -86,27 +88,29 @@ public class MainGame implements Screen {
         wallBodies = Utils.wallCollisionShapes(tiledMap, world);
 
         player = new Player(rect.getX(), rect.getY(), world);
-        enemy = new Enemy(300, 230, world);
+        ec = new EnemyController(new Vector2(300, 230), world, batch);
     }
 
     private void removeBodiesToDelete() {
         Array<Body> bodies = cl.getBodies();
-        for(int i = 0; i < bodies.size; i++) {
+        for(Body b : bodies) {
             //Create a deep copy of all the bullets then iterate over them.
             List<Bullet> copy = new ArrayList<Bullet>(bullets.size());
             for(Bullet bullet : bullets) copy.add(bullet);
             for(Bullet bullet : copy) {
                 //If the bullets collides with a wall then add to explosion list and remove from bullet list
-                if(bullet.getBody() == bodies.get(i)) {
+                if(bullet.getBody() == b) {
                     bullets.remove(bullet);
-                    explosions.add(new Explosions(Utils.convertToWorld(bodies.get(i).getWorldCenter().x)-16,
-                            Utils.convertToWorld(bodies.get(i).getWorldCenter().y)-16,
+                    explosions.add(new Explosions(Utils.convertToWorld(b.getWorldCenter().x)-16,
+                            Utils.convertToWorld(b.getWorldCenter().y)-16,
                             batch, 0));
                 }
             }
 
-            world.destroyBody(bodies.get(i));
-            bodies.get(i).setUserData(null);
+            ec.destroyEnemy(b, explosions);
+
+            world.destroyBody(b);
+            b.setUserData(null);
         }
         bodies.clear();
     }
@@ -137,10 +141,12 @@ public class MainGame implements Screen {
             time_since_last_fire = 0.0f;
         }
 
+        ec.createNewEnemy();
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         player.draw(batch);
-        enemy.draw(batch);
+        ec.drawEnemies(player);
         for(Bullet element : bullets) {
             element.draw(batch);
         }
@@ -157,7 +163,6 @@ public class MainGame implements Screen {
         batch.end();
 
         player.act();
-        enemy.act(player.getBody());
 
         debugRenderer.render(world, b2dCamera.combined);
         world.step(1/60f, 6, 2);

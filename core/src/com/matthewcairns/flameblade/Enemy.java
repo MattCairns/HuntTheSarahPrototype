@@ -54,4 +54,8 @@ public class Enemy {
         batch.draw(ghostImage, Utils.convertToWorld(enemy.getWorldCenter().x)-16, Utils.convertToWorld(enemy.getWorldCenter().y)-16);
     }
 
+    public Body getBody() {
+        return enemy;
+    }
+
 }

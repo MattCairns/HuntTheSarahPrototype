@@ -28,6 +28,27 @@ public class MyContactListener implements ContactListener {
                     bodiesToDestroy.add(fa.getBody());
             }
         }
+
+        //If enemy hits a bullet then add both bodies to the destroy list.
+        if(fa.getUserData() != null && fa.getUserData().equals("bullet")) {
+            if(fb.getUserData() != null && fb.getUserData().equals("enemy")) {
+                if(!bodiesToDestroy.contains(fb.getBody(), true))
+                    bodiesToDestroy.add(fb.getBody());
+                if(!bodiesToDestroy.contains(fa.getBody(), true))
+                    bodiesToDestroy.add(fa.getBody());
+
+                System.out.println("ab");
+            }
+        }
+        else if(fb.getUserData() != null && fb.getUserData().equals("bullet")) {
+            if(fa.getUserData() != null && fa.getUserData().equals("enemy")) {
+                if(!bodiesToDestroy.contains(fb.getBody(), true))
+                    bodiesToDestroy.add(fb.getBody());
+                if(!bodiesToDestroy.contains(fa.getBody(), true))
+                    bodiesToDestroy.add(fa.getBody());
+                System.out.println("ba");
+            }
+        }
     }
 
     //Called when two fixtures no longer colliding.
