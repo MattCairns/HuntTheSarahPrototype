@@ -1,5 +1,6 @@
 package com.matthewcairns.flameblade;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.matthewcairns.flameblade.handlers.AudioController;
 
 /**
  * Created by Matthew Cairns on 06/05/2014.
@@ -32,7 +34,7 @@ public class MainMenuScreen implements Screen {
 
     OrthographicCamera camera;
 
-    Music music;
+    AudioController audioController;
 
     public MainMenuScreen(final Flameblade gam) {
 
@@ -62,19 +64,20 @@ public class MainMenuScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                gam.setScreen(new MainGame(game));
-                music.stop();
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                gam.setScreen(new MainGame(game, audioController));
+                audioController.getMusic("The Saga Begins").stop();
             }
         });
 
         stage.addActor(titleButton);
         stage.addActor(playButton);
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("music/thesagabegins.ogg"));
-        music.setVolume(0.5f);
-        music.play();
 
+
+        audioController = new AudioController();
+        audioController.getMusic("The Saga Begins").play();
     }
 
     @Override
@@ -99,6 +102,5 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        music.dispose();
     }
 }

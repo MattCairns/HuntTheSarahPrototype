@@ -21,10 +21,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.matthewcairns.flameblade.handlers.EnemyController;
-import com.matthewcairns.flameblade.handlers.Explosions;
-import com.matthewcairns.flameblade.handlers.MyContactListener;
-import com.matthewcairns.flameblade.handlers.Utils;
+import com.matthewcairns.flameblade.handlers.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,13 +53,11 @@ public class MainGame implements Screen {
     Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     OrthographicCamera b2dCamera;
 
-    Music music;
-
     Player player;
-    Enemy enemy;
     EnemyController ec;
+    AudioController audioController;
 
-    public MainGame(final Flameblade gam) {
+    public MainGame(final Flameblade gam, AudioController ac) {
         game = gam;
 
         batch = new SpriteBatch();
@@ -71,22 +66,27 @@ public class MainGame implements Screen {
         camera.setToOrtho(false, 800, 480);
         camera.update();
 
-        b2dCamera = new OrthographicCamera();
-        b2dCamera.setToOrtho(false, Utils.convertToBox(800), Utils.convertToBox(480));
-        b2dCamera.update();
+        tiledMap = new TmxMapLoader().load("testmap.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
+        audioController = ac;
+
+        startB2D();
+    }
+
+    private void startB2D() {
         world = new World(new Vector2(0,0), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
 
-        tiledMap = new TmxMapLoader().load("testmap.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-
+        b2dCamera = new OrthographicCamera();
+        b2dCamera.setToOrtho(false, Utils.convertToBox(800), Utils.convertToBox(480));
+        b2dCamera.update();
 
         MapObjects objects = tiledMap.getLayers().get("spawns").getObjects();
         MapObject spawn = objects.get("spawn_point");
         Rectangle rect = ((RectangleMapObject)spawn).getRectangle();
-        player = new Player(rect.getX(), rect.getY(), world);
+        player = new Player(rect.getX(), rect.getY(), batch, world, audioController);
         cl.getPlayer(player);
 
         wallBodies = Utils.wallCollisionShapes(tiledMap, world);
@@ -95,9 +95,6 @@ public class MainGame implements Screen {
         Rectangle enemy_spawn_rect = ((RectangleMapObject)enemy_spawn).getRectangle();
         System.out.println(enemy_spawn_rect.getX());
         ec = new EnemyController(new Vector2(enemy_spawn_rect.getX(), enemy_spawn_rect.getY()), world, batch, 0.5f);
-
-        music = Gdx.audio.newMusic(Gdx.files.internal("music/swashingthebuck.ogg"));
-        music.play();
     }
 
     private void removeBodiesToDelete() {
@@ -129,8 +126,6 @@ public class MainGame implements Screen {
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
         time_since_last_fire += Gdx.graphics.getDeltaTime();
 
         //Update the camera for libgdx
@@ -154,7 +149,7 @@ public class MainGame implements Screen {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        player.draw(batch);
+        player.draw();
         ec.drawEnemies(player);
         for(Bullet element : bullets) {
             element.draw(batch);
@@ -179,6 +174,8 @@ public class MainGame implements Screen {
         removeBodiesToDelete();
 
         if(player.getPlayerHealth() == 0.0f) {
+            this.dispose();
+            game.setScreen(new MainMenuScreen(game));
             pause();
         }
 
@@ -195,5 +192,8 @@ public class MainGame implements Screen {
     @Override
     public void show() {}
     @Override
-    public void dispose() {}
+    public void dispose() {
+        world.dispose();
+
+    }
 }

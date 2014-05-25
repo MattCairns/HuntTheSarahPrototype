@@ -3,9 +3,11 @@ package com.matthewcairns.flameblade;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.matthewcairns.flameblade.handlers.AudioController;
 import com.matthewcairns.flameblade.handlers.B2DVars;
 import com.matthewcairns.flameblade.handlers.Utils;
 
@@ -15,6 +17,8 @@ import com.matthewcairns.flameblade.handlers.Utils;
  */
 public class Player {
     TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("elf_sprites.txt"));
+    Texture damageRed = new Texture(Gdx.files.internal("damage_red_flash.png"));
+    Batch batch;
     BodyDef bodyDef;
     Body player;
 
@@ -35,8 +39,8 @@ public class Player {
     Animation elfWalkDownLeft;
     Animation elfWalkDownRight;
 
-    Sound walkingSound;
-    Sound hurtSound;
+    AudioController audioController;
+
     private float timeSinceLastStep = 0.0f;
 
     float oldX;
@@ -47,6 +51,8 @@ public class Player {
     float stateTime = 0.0f;
 
     float playerHealth = 100.0f;
+    boolean playerHurt = false;
+    float fadeTime = 0.0f;
 
     public enum State {
         IDLE, WALKING, DYING
@@ -58,7 +64,7 @@ public class Player {
     State state = State.IDLE;
     FaceState faceState = FaceState.RIGHT;
 
-    public Player(float x, float y, World world) {
+    public Player(float x, float y, Batch batch, World world, AudioController ac) {
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(Utils.convertToBox(x), Utils.convertToBox(y));
@@ -111,8 +117,9 @@ public class Player {
         //Animation for walking down right.
         elfWalkDownRight = Utils.createAnimation(atlas, new String[]{"elf_walk_down_right_one", "elf_walk_down_right_two"}, WALK_SPEED);
 
-        walkingSound = Gdx.audio.newSound(Gdx.files.internal("sounds/footstep06.ogg"));
-        hurtSound = Gdx.audio.newSound(Gdx.files.internal("sounds/player_hurt.mp3"));
+        this.batch = batch;
+
+        audioController = ac;
     }
 
 
@@ -174,64 +181,65 @@ public class Player {
 
     }
 
-    public void draw(Batch batch) {
-        stateTime += Gdx.graphics.getDeltaTime();
+    public void draw() {
+        float delta = Gdx.graphics.getDeltaTime();
+        stateTime += delta;
 
         switch(state) {
             case IDLE:
-                switch(faceState) {
+                switch (faceState) {
                     case LEFT:
-                        batch.draw(elfIdleLeft, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfIdleLeft, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case RIGHT:
-                        batch.draw(elfIdleRight, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfIdleRight, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case UP:
-                        batch.draw(elfIdleUp, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfIdleUp, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case DOWN:
-                        batch.draw(elfIdleDown, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfIdleDown, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case UPLEFT:
-                        batch.draw(elfIdleUpLeft, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfIdleUpLeft, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case UPRIGHT:
-                        batch.draw(elfIdleUpRight, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfIdleUpRight, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case DOWNRIGHT:
-                        batch.draw(elfIdleDownRight, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfIdleDownRight, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case DOWNLEFT:
-                        batch.draw(elfIdleDownLeft, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfIdleDownLeft, Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                 }
                 break;
 
             case WALKING:
-                switch(faceState) {
+                switch (faceState) {
                     case LEFT:
-                        batch.draw(elfWalkLeft.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfWalkLeft.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case RIGHT:
-                        batch.draw(elfWalkRight.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfWalkRight.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case UP:
-                        batch.draw(elfWalkUp.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfWalkUp.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case DOWN:
-                        batch.draw(elfWalkDown.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfWalkDown.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case UPLEFT:
-                        batch.draw(elfWalkUpLeft.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfWalkUpLeft.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case UPRIGHT:
-                        batch.draw(elfWalkUpRight.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfWalkUpRight.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case DOWNRIGHT:
-                        batch.draw(elfWalkDownRight.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfWalkDownRight.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                     case DOWNLEFT:
-                        batch.draw(elfWalkDownLeft.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y)-16);
+                        batch.draw(elfWalkDownLeft.getKeyFrame(stateTime, true), Utils.convertToWorld(player.getWorldCenter().x) - 16, Utils.convertToWorld(player.getWorldCenter().y) - 16);
                         break;
                 }
                 break;
@@ -275,7 +283,12 @@ public class Player {
     public void setPlayerHealth(float playerHealth) {
         this.playerHealth = playerHealth;
         System.out.println(playerHealth);
-        hurtSound.play();
+        audioController.getSound("Player Hurt").play();
+
+        batch.begin();
+        batch.draw(damageRed, Utils.convertToWorld(player.getWorldCenter().x)-400, Utils.convertToWorld(player.getWorldCenter().y)-240);
+        batch.end();
+
     }
 
 
