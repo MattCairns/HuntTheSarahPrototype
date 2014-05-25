@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -54,8 +55,13 @@ public class MainGame implements Screen {
     OrthographicCamera b2dCamera;
 
     Player player;
-    EnemyController ec;
+
+    Array<EnemyController> ec = new Array<EnemyController>();
     AudioController audioController;
+
+    //TEMPORARY
+    ShapeRenderer sr = new ShapeRenderer();
+
 
     public MainGame(final Flameblade gam, AudioController ac) {
         game = gam;
@@ -91,10 +97,13 @@ public class MainGame implements Screen {
 
         wallBodies = Utils.wallCollisionShapes(tiledMap, world);
 
-        MapObject enemy_spawn = objects.get("enemy_spawn_point");
-        Rectangle enemy_spawn_rect = ((RectangleMapObject)enemy_spawn).getRectangle();
-        System.out.println(enemy_spawn_rect.getX());
-        ec = new EnemyController(new Vector2(enemy_spawn_rect.getX(), enemy_spawn_rect.getY()), world, batch, 0.5f);
+        for(MapObject object :  tiledMap.getLayers().get("spawns").getObjects()) {
+            if (object.getName().equals("enemy_spawn_point")) {
+                Rectangle enemy_spawn_rect = ((RectangleMapObject) object).getRectangle();
+                ec.add(new EnemyController(new Vector2(enemy_spawn_rect.getX(), enemy_spawn_rect.getY()), world, batch, 1.0f));
+            }
+        }
+
     }
 
     private void removeBodiesToDelete() {
@@ -113,7 +122,15 @@ public class MainGame implements Screen {
                 }
             }
 
-            ec.destroyEnemy(b, explosions);
+            for(EnemyController e : ec) {
+                e.destroyEnemy(b, explosions);
+                if(e.getBody() == b) {
+                    e.destroySelf();
+                }
+            }
+
+
+
 
             world.destroyBody(b);
             b.setUserData(null);
@@ -125,6 +142,8 @@ public class MainGame implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
 
         time_since_last_fire += Gdx.graphics.getDeltaTime();
 
@@ -145,12 +164,16 @@ public class MainGame implements Screen {
             time_since_last_fire = 0.0f;
         }
 
-        ec.createNewEnemy();
+        for(EnemyController e : ec)
+            e.createNewEnemy();
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         player.draw();
-        ec.drawEnemies(player);
+
+        for(EnemyController e : ec)
+            e.drawEnemies(player);
+
         for(Bullet element : bullets) {
             element.draw(batch);
         }
@@ -166,6 +189,8 @@ public class MainGame implements Screen {
 
         batch.end();
 
+
+
         player.act();
 
         debugRenderer.render(world, b2dCamera.combined);
@@ -178,6 +203,15 @@ public class MainGame implements Screen {
             game.setScreen(new MainMenuScreen(game));
             pause();
         }
+
+        //TEMP
+        sr.setProjectionMatrix(b2dCamera.combined);
+        //Draw raycasts for enemies to player
+        sr.begin(ShapeRenderer.ShapeType.Line);
+        for(EnemyController e : ec)
+            for(Enemy en : e.getEnemies())
+                en.drawRays(sr);
+        sr.end();
 
     }
 

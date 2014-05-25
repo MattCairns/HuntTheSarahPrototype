@@ -71,7 +71,29 @@ public class MyContactListener implements ContactListener {
                 player.setPlayerHealth(player.getPlayerHealth()-5.0f);
             }
         }
+
+        //If bullet hits spawner
+        if(fa.getUserData() != null && fa.getUserData().equals("spawner")) {
+            if(fb.getUserData() != null && fb.getUserData().equals("bullet")) {
+                if(!bodiesToDestroy.contains(fb.getBody(), true))
+                    bodiesToDestroy.add(fb.getBody());
+
+                if(!bodiesToDestroy.contains(fa.getBody(), true))
+                    bodiesToDestroy.add(fa.getBody());
+            }
+        }
+        else if(fb.getUserData() != null && fb.getUserData().equals("spawner")) {
+            if(fa.getUserData() != null && fa.getUserData().equals("bullet")) {
+                if(!bodiesToDestroy.contains(fb.getBody(), true))
+                    bodiesToDestroy.add(fb.getBody());
+                if(!bodiesToDestroy.contains(fa.getBody(), true))
+                    bodiesToDestroy.add(fa.getBody());
+            }
+        }
     }
+
+
+
 
     //Called when two fixtures no longer colliding.
     public void endContact(Contact c) {}

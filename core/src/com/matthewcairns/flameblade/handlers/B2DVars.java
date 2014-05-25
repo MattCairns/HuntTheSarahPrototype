@@ -7,7 +7,8 @@ package com.matthewcairns.flameblade.handlers;
 public class B2DVars {
     public static final short BIT_WALLS = 2;
     public static final short BIT_BULLETS = 4;
-    public static final short BIT_ENEMIES = 8;
-    public static final short BIT_PLAYER = 10;
+    public static final short BIT_ENEMIES = 6;
+    public static final short BIT_PLAYER = 8;
+    public static final short BIT_SPAWNER = 10;
 
 }

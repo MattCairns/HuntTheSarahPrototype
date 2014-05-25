@@ -84,10 +84,10 @@
  <objectgroup name="spawns" width="35" height="35">
   <object name="spawn_point" x="946" y="122" width="26" height="26"/>
   <object name="enemy_spawn_point" x="125" y="251" width="30" height="29"/>
-  <object x="316" y="248" width="28" height="26"/>
-  <object x="504" y="249" width="28" height="26"/>
+  <object name="enemy_spawn_point" x="316" y="248" width="28" height="26"/>
+  <object name="enemy_spawn_point" x="504" y="249" width="28" height="26"/>
  </objectgroup>
- <objectgroup name="Collide" width="35" height="35" visible="0">
+ <objectgroup name="Collide" width="35" height="35">
   <object x="34" y="160" width="29" height="221"/>
   <object x="34" y="160" width="602" height="30"/>
   <object x="225" y="187" width="29" height="196"/>
