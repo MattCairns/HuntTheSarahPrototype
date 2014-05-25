@@ -69,10 +69,6 @@ public class Enemy {
                 if(fixture.getUserData().equals("player")) {
                     enemy_chase = true;
                 }
-                else {
-                    enemy_chase = false;
-                }
-
 
                 collision.set(point);
                 enemynormal.set(normal);
@@ -83,12 +79,7 @@ public class Enemy {
         world.rayCast(callback, enemy.getWorldCenter(), player.getWorldCenter());
 
         if(enemy_chase) {
-            System.out.println("Chasing player");
             enemy.applyForce(direction.scl(10, 10), enemy.getWorldCenter(), true);
-        }
-        else {
-            enemy.applyForce(direction.scl(10, 10), origin, true);
-
         }
 
     }

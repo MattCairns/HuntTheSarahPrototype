@@ -61,7 +61,8 @@ public class MainGame implements Screen {
 
     //TEMPORARY
     ShapeRenderer sr = new ShapeRenderer();
-
+    Boolean enableRaycasting = false;
+    float keyTime = 0.0f;
 
     public MainGame(final Flameblade gam, AudioController ac) {
         game = gam;
@@ -193,7 +194,7 @@ public class MainGame implements Screen {
 
         player.act();
 
-        debugRenderer.render(world, b2dCamera.combined);
+        //debugRenderer.render(world, b2dCamera.combined);
         world.step(1/60f, 6, 2);
 
         removeBodiesToDelete();
@@ -204,14 +205,25 @@ public class MainGame implements Screen {
             pause();
         }
 
-        //TEMP
-        sr.setProjectionMatrix(b2dCamera.combined);
-        //Draw raycasts for enemies to player
-        sr.begin(ShapeRenderer.ShapeType.Line);
-        for(EnemyController e : ec)
-            for(Enemy en : e.getEnemies())
-                en.drawRays(sr);
-        sr.end();
+        //If the user hits the R button the keyboard raycasting lines are enabled
+        if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+            if(keyTime > 0.5f) {
+                keyTime = 0.0f;
+                enableRaycasting = !enableRaycasting;
+            }
+        }
+        keyTime += delta;
+
+        if(enableRaycasting) {
+            //TEMP
+            sr.setProjectionMatrix(b2dCamera.combined);
+            //Draw raycasts for enemies to player
+            sr.begin(ShapeRenderer.ShapeType.Line);
+            for (EnemyController e : ec)
+                for (Enemy en : e.getEnemies())
+                    en.drawRays(sr);
+            sr.end();
+        }
 
     }
 

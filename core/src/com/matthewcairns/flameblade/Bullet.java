@@ -15,6 +15,7 @@ import com.matthewcairns.flameblade.handlers.Utils;
  */
 public class Bullet {
     TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("elf_sprites.txt"));
+    Texture bulletImage = new Texture(Gdx.files.internal("bullet.png"));
     BodyDef bodyDef;
     Body bullet;
 
@@ -22,7 +23,6 @@ public class Bullet {
     //Texture arrowImage = new Texture(Gdx.files.internal("arrow_b2d.png"));
 
     Sound arrowShoot;
-
 
     float VELOCITY = 20.0f;
     String arrow_dir;
@@ -72,7 +72,7 @@ public class Bullet {
     }
 
     public void draw(Batch batch) {
-       // batch.draw(arrowImage, Utils.convertToWorld(bullet.getWorldCenter().x)+20, Utils.convertToWorld(bullet.getWorldCenter().y)+20);
+       batch.draw(bulletImage, Utils.convertToWorld(bullet.getWorldCenter().x)+5, Utils.convertToWorld(bullet.getWorldCenter().y)+5);
         if(arrow_dir.equals("UP"))
             bullet.applyForceToCenter(0.0f, VELOCITY,true);
         if(arrow_dir.equals("DOWN"))
