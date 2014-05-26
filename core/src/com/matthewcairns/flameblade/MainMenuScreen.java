@@ -25,7 +25,7 @@ public class MainMenuScreen implements Screen {
     Stage stage;
 
     //Load UI texture atlas from assets.
-    TextureAtlas atlas = new TextureAtlas("ui/ui_spritesheet.txt");
+    TextureAtlas atlas = new TextureAtlas("ui/ui.txt");
     Skin skin;
 
     TextButton titleButton;
