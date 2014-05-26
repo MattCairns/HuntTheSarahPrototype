@@ -35,6 +35,7 @@ public class MainGame implements Screen {
 
     private OrthographicCamera camera;
     private OrthographicCamera b2dCamera;
+    private OrthographicCamera UICamera;
 
     private TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
@@ -52,6 +53,7 @@ public class MainGame implements Screen {
     private AudioController audioController;
 
     private Player player;
+    private HealthBar healthBar = new HealthBar();
     private Array<EnemyController> ec = new Array<EnemyController>();
 
     //Used for drawing ray casting lines
@@ -65,6 +67,10 @@ public class MainGame implements Screen {
         batch = new SpriteBatch();
 
         camera = new OrthographicCamera();
+        camera.setToOrtho(false, 800, 480);
+        camera.update();
+
+        UICamera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
         camera.update();
 
@@ -124,8 +130,9 @@ public class MainGame implements Screen {
         player.act(); //Player movement logic
 
         drawBatch(); //Draws all the textures in the world
+        drawUI();
 
-        //debugRenderer.render(world, b2dCamera.combined); //Enables drawing of box2d objects
+        debugRenderer.render(world, b2dCamera.combined); //Enables drawing of box2d objects
         world.step(1/60f, 6, 2); //Steps the box2d world at 60 frames per second.
 
         removeBodiesToDelete(); //Removes any bodies that are queued for deletion
@@ -146,6 +153,10 @@ public class MainGame implements Screen {
         b2dCamera.position.set(player.getBody().getWorldCenter().x,
                                player.getBody().getWorldCenter().y, 0); //Centers camera at player location
         b2dCamera.update();
+
+        UICamera.position.set(Utils.convertToWorld(player.getBody().getWorldCenter().x),
+                Utils.convertToWorld(player.getBody().getWorldCenter().y), 0); //Centers camera at player location
+        UICamera.update();
 
     }
 
@@ -171,7 +182,17 @@ public class MainGame implements Screen {
                 explosions.removeValue(e, true);
             }
         }
+
+        healthBar.draw(player.getBody().getWorldCenter(), batch, player.getPlayerHealth());
         batch.end();
+    }
+
+    private void drawUI() {
+        batch.setProjectionMatrix(UICamera.combined);
+        batch.begin();
+        healthBar.draw(player.getBody().getWorldCenter(), batch, player.getPlayerHealth());
+        batch.end();
+        camera.update();
     }
 
     private void fireBullet() {

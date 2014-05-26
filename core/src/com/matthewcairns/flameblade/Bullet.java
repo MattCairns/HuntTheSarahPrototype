@@ -72,7 +72,7 @@ public class Bullet {
     }
 
     public void draw(Batch batch) {
-       batch.draw(bulletImage, Utils.convertToWorld(bullet.getWorldCenter().x)+5, Utils.convertToWorld(bullet.getWorldCenter().y)+5);
+       batch.draw(bulletImage, Utils.convertToWorld(bullet.getWorldCenter().x)-5, Utils.convertToWorld(bullet.getWorldCenter().y)-5);
         if(arrow_dir.equals("UP"))
             bullet.applyForceToCenter(0.0f, VELOCITY,true);
         if(arrow_dir.equals("DOWN"))
