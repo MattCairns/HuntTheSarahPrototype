@@ -3,7 +3,6 @@ package com.matthewcairns.flameblade;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -32,37 +30,36 @@ import java.util.List;
  * All rights reserved.
  */
 public class MainGame implements Screen {
-    final Flameblade game;
-    SpriteBatch batch;
-    OrthographicCamera camera;
+    private final Flameblade game;
+    private SpriteBatch batch;
 
-    TiledMap tiledMap;
-    TiledMapRenderer tiledMapRenderer;
+    private OrthographicCamera camera;
+    private OrthographicCamera b2dCamera;
 
-    Array<Body> wallBodies = new Array<Body>();
+    private TiledMap tiledMap;
+    private TiledMapRenderer tiledMapRenderer;
 
-    List<Bullet> bullets = new ArrayList<Bullet>();
-    float bullet_time = 0.2f;
-    float time_since_last_fire = 0.0f;
+    private Array<Body> wallBodies = new Array<Body>();
 
-    Array<Explosions> explosions = new Array<Explosions>();
+    private List<Bullet> bullets = new ArrayList<Bullet>();
+    private float timeSinceLastFire = 0.0f;
+
+    private Array<Explosions> explosions = new Array<Explosions>();
 
     //Box 2D world for physics simulation
-    World world;
-    MyContactListener cl;
+    private World world;
+    private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 
-    Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
-    OrthographicCamera b2dCamera;
+    private MyContactListener cl;
+    private AudioController audioController;
 
-    Player player;
+    private Player player;
+    private Array<EnemyController> ec = new Array<EnemyController>();
 
-    Array<EnemyController> ec = new Array<EnemyController>();
-    AudioController audioController;
-
-    //TEMPORARY
-    ShapeRenderer sr = new ShapeRenderer();
-    Boolean enableRaycasting = false;
-    float keyTime = 0.0f;
+    //Used for drawing ray casting lines
+    private ShapeRenderer sr = new ShapeRenderer();
+    private Boolean enableRaycasting = false;
+    private float keyTime = 0.0f;
 
     public MainGame(final Flameblade gam, AudioController ac) {
         game = gam;
@@ -107,6 +104,82 @@ public class MainGame implements Screen {
 
     }
 
+    @Override
+    public void render(float delta) {
+        //Set background color
+        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
+        //Clear the screen
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //Set up the box2d and textures camera.
+        initializeCameras();
+
+        //Set the view of the tilemap to the camera and render
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render();
+
+        fireBullet(); //Fire a bullet when the player hits the SPACE key
+
+        for(EnemyController e : ec)
+            e.createNewEnemy(); //Adds a new enemy to the world according the the EnemyController settings.
+
+        player.act(); //Player movement logic
+
+        drawBatch(); //Draws all the textures in the world
+
+        //debugRenderer.render(world, b2dCamera.combined); //Enables drawing of box2d objects
+        world.step(1/60f, 6, 2); //Steps the box2d world at 60 frames per second.
+
+        removeBodiesToDelete(); //Removes any bodies that are queued for deletion
+
+        enableRaycasting(); //Enables showing ray casting lines
+
+        gameOver(); //If the players health reaches 0 return to main menu
+
+    }
+
+    private void initializeCameras() {
+        //Update the camera for libgdx
+        camera.position.set(Utils.convertToWorld(player.getBody().getWorldCenter().x),
+                Utils.convertToWorld(player.getBody().getWorldCenter().y), 0);
+        camera.update();
+
+        //Update the camera for box2d
+        b2dCamera.position.set(player.getBody().getWorldCenter().x,
+                player.getBody().getWorldCenter().y, 0);
+        b2dCamera.update();
+
+    }
+
+    private void drawBatch() {
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        player.draw();
+        for(EnemyController e : ec)
+            e.drawEnemies(player);
+        for(Bullet element : bullets) {
+            element.draw(batch);
+        }
+        Array<Explosions> copy = new Array<Explosions>();
+        for(Explosions e : explosions) copy.add(e);
+        for(Explosions e : copy) {
+            e.explode();
+            if(e.getFlaggedForRemoval()) {
+                explosions.removeValue(e, true);
+            }
+        }
+        batch.end();
+    }
+
+    private void fireBullet() {
+        float bullet_time = 0.2f;
+        timeSinceLastFire += Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && timeSinceLastFire >= bullet_time) {
+            bullets.add(new Bullet(player.getBody(), player.getFaceState(), world));
+            timeSinceLastFire = 0.0f;
+        }
+    }
+
     private void removeBodiesToDelete() {
         Array<Body> bodies = cl.getBodies();
         for(Body b : bodies) {
@@ -122,89 +195,19 @@ public class MainGame implements Screen {
                             batch, 0));
                 }
             }
-
             for(EnemyController e : ec) {
                 e.destroyEnemy(b, explosions);
                 if(e.getBody() == b) {
                     e.destroySelf();
                 }
             }
-
-
-
-
             world.destroyBody(b);
             b.setUserData(null);
         }
         bodies.clear();
     }
 
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-
-
-        time_since_last_fire += Gdx.graphics.getDeltaTime();
-
-        //Update the camera for libgdx
-        camera.position.set(Utils.convertToWorld(player.getBody().getWorldCenter().x),
-                            Utils.convertToWorld(player.getBody().getWorldCenter().y), 0);
-        camera.update();
-
-        //Update the camera for box2d
-        b2dCamera.position.set(player.getBody().getWorldCenter().x,
-                               player.getBody().getWorldCenter().y, 0);
-        b2dCamera.update();
-
-        tiledMapRenderer.setView(camera);
-        tiledMapRenderer.render();
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && time_since_last_fire >= bullet_time) {
-            bullets.add(new Bullet(player.getBody(), player.getFaceState(), world));
-            time_since_last_fire = 0.0f;
-        }
-
-        for(EnemyController e : ec)
-            e.createNewEnemy();
-
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        player.draw();
-
-        for(EnemyController e : ec)
-            e.drawEnemies(player);
-
-        for(Bullet element : bullets) {
-            element.draw(batch);
-        }
-
-        Array<Explosions> copy = new Array<Explosions>();
-        for(Explosions e : explosions) copy.add(e);
-        for(Explosions e : copy) {
-            e.explode();
-            if(e.getFlaggedForRemoval()) {
-                explosions.removeValue(e, true);
-            }
-        }
-
-        batch.end();
-
-
-
-        player.act();
-
-        //debugRenderer.render(world, b2dCamera.combined);
-        world.step(1/60f, 6, 2);
-
-        removeBodiesToDelete();
-
-        if(player.getPlayerHealth() == 0.0f) {
-            this.dispose();
-            game.setScreen(new MainMenuScreen(game));
-            pause();
-        }
-
+    private void enableRaycasting() {
         //If the user hits the R button the keyboard raycasting lines are enabled
         if (Gdx.input.isKeyPressed(Input.Keys.R)) {
             if(keyTime > 0.5f) {
@@ -212,7 +215,7 @@ public class MainGame implements Screen {
                 enableRaycasting = !enableRaycasting;
             }
         }
-        keyTime += delta;
+        keyTime += Gdx.graphics.getDeltaTime();
 
         if(enableRaycasting) {
             //TEMP
@@ -224,7 +227,14 @@ public class MainGame implements Screen {
                     en.drawRays(sr);
             sr.end();
         }
+    }
 
+    private void gameOver() {
+        if(player.getPlayerHealth() == 0.0f) {
+            this.dispose();
+            game.setScreen(new MainMenuScreen(game));
+            pause();
+        }
     }
 
     @Override
