@@ -39,8 +39,6 @@ public class MainGame implements Screen {
     private TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
 
-    private Array<Body> wallBodies = new Array<Body>();
-
     private List<Bullet> bullets = new ArrayList<Bullet>();
     private float timeSinceLastFire = 0.0f;
 
@@ -50,7 +48,7 @@ public class MainGame implements Screen {
     private World world;
     private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 
-    private MyContactListener cl;
+    private MyContactListener contactListener;
     private AudioController audioController;
 
     private Player player;
@@ -80,8 +78,8 @@ public class MainGame implements Screen {
 
     private void startB2D() {
         world = new World(new Vector2(0,0), true);
-        cl = new MyContactListener();
-        world.setContactListener(cl);
+        contactListener = new MyContactListener();
+        world.setContactListener(contactListener);
 
         b2dCamera = new OrthographicCamera();
         b2dCamera.setToOrtho(false, Utils.convertToBox(800), Utils.convertToBox(480));
@@ -91,9 +89,9 @@ public class MainGame implements Screen {
         MapObject spawn = objects.get("spawn_point");
         Rectangle rect = ((RectangleMapObject)spawn).getRectangle();
         player = new Player(rect.getX(), rect.getY(), batch, world, audioController);
-        cl.getPlayer(player);
+        contactListener.getPlayer(player);
 
-        wallBodies = Utils.wallCollisionShapes(tiledMap, world);
+        Utils.wallCollisionShapes(tiledMap, world);
 
         for(MapObject object :  tiledMap.getLayers().get("spawns").getObjects()) {
             if (object.getName().equals("enemy_spawn_point")) {
@@ -141,12 +139,12 @@ public class MainGame implements Screen {
     private void initializeCameras() {
         //Update the camera for libgdx
         camera.position.set(Utils.convertToWorld(player.getBody().getWorldCenter().x),
-                Utils.convertToWorld(player.getBody().getWorldCenter().y), 0);
+                            Utils.convertToWorld(player.getBody().getWorldCenter().y), 0); //Centers camera at player location
         camera.update();
 
         //Update the camera for box2d
         b2dCamera.position.set(player.getBody().getWorldCenter().x,
-                player.getBody().getWorldCenter().y, 0);
+                               player.getBody().getWorldCenter().y, 0); //Centers camera at player location
         b2dCamera.update();
 
     }
@@ -155,11 +153,16 @@ public class MainGame implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         player.draw();
+        //Draws all the enemies to the screen
         for(EnemyController e : ec)
             e.drawEnemies(player);
+
+        //Draws all the bullets to the scren
         for(Bullet element : bullets) {
             element.draw(batch);
         }
+
+        //Draws all the explosions to the screen and removes then if they have exploded already.
         Array<Explosions> copy = new Array<Explosions>();
         for(Explosions e : explosions) copy.add(e);
         for(Explosions e : copy) {
@@ -181,7 +184,7 @@ public class MainGame implements Screen {
     }
 
     private void removeBodiesToDelete() {
-        Array<Body> bodies = cl.getBodies();
+        Array<Body> bodies = contactListener.getBodies();
         for(Body b : bodies) {
             //Create a deep copy of all the bullets then iterate over them.
             List<Bullet> copy = new ArrayList<Bullet>(bullets.size());
@@ -195,15 +198,19 @@ public class MainGame implements Screen {
                             batch, 0));
                 }
             }
+            //If an enemy collides with the player or a bullet then destroy them and explode.
             for(EnemyController e : ec) {
                 e.destroyEnemy(b, explosions);
                 if(e.getBody() == b) {
                     e.destroySelf();
                 }
             }
+
+            //cleanly remove the body from the box2d world
             world.destroyBody(b);
             b.setUserData(null);
         }
+        //Clear the dead bodies from the array
         bodies.clear();
     }
 
@@ -230,10 +237,13 @@ public class MainGame implements Screen {
     }
 
     private void gameOver() {
+        //TODO: Redirect to a GAME OVER screen upon death instead of the main menu.
+        //TODO: Make the screen fade away slowly upon death.
         if(player.getPlayerHealth() == 0.0f) {
-            this.dispose();
+            dispose();
             game.setScreen(new MainMenuScreen(game));
             pause();
+
         }
     }
 
@@ -250,6 +260,9 @@ public class MainGame implements Screen {
     @Override
     public void dispose() {
         world.dispose();
-
+        player.dispose();
+        tiledMap.dispose();
+        debugRenderer.dispose();
+        sr.dispose();
     }
 }

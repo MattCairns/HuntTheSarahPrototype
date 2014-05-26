@@ -248,6 +248,7 @@ public class Player {
     }
 
     public Body getBody() { return player; }
+
     public String getFaceState() {
         if(faceState == FaceState.UP) {
             return "UP";
@@ -291,5 +292,11 @@ public class Player {
 
     }
 
+    public void dispose() {
+        atlas.dispose();
+        damageRed.dispose();
+        batch.dispose();
+
+    }
 
 }
